@@ -24,5 +24,5 @@ File or Folder | Purpose
 
 Learn more at https://cap.cloud.sap/docs/get-started/.
 
-Learn more at Open SAP Course Building Applications with SAP Cloud Application Programming Model => https://open.sap.com/courses/cp7
+Learn more at Open SAP Course Building Applications with SAP Cloud Application Programming Model => https://open.sap.com/courses/cp7  
 
