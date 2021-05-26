@@ -1,0 +1,23 @@
+@server = http://localhost:4004
+@me = Authorization: Basic {{$processEnv USER}}:
+
+### ------------------------------------------------------------------------
+# Get service info
+GET {{server}}/eventparticipant
+{{me}}
+
+### ------------------------------------------------------------------------
+# Get $metadata document
+GET {{server}}/eventparticipant/$metadata
+
+### ------------------------------------------------------------------------
+# Browse Events 
+GET {{server}}/eventparticipant/Events?
+  # &$select=ID,title,descr,date
+   &$expand=Participants
+  # &sap-language=de
+
+### ------------------------------------------------------------------------
+# Browse Participants 
+GET {{server}}/eventparticipant/Participants?
+  # &$select=ID,name
