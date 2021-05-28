@@ -12,8 +12,9 @@ entity Events : managed, cuid {
     participantsFeeAmount   : Decimal(6,2);
     currency                : Currency;
     statusCode              : EventStatus;
-    participants            : Composition of many Participants on participants.parent = $self
-    //title  : localized String(111);
+    participants            : Composition of many Participants on participants.parent = $self;
+    confirmedParticipants   : Association to many Participants on confirmedParticipants.parent = $self and confirmedParticipants.statusCode = 'Confirmed'
+     //title  : localized String(111);
     //descr  : localized String(1111); 
 }
 
@@ -38,4 +39,6 @@ type EventStatus : Integer enum{
   Available = 1;
   Booked    = 2;
   Completed = 3;
+  Cancelled = 4;
+  Blocked   = 5;
 }

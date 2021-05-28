@@ -16,7 +16,7 @@ module.exports = cds.service.impl(srv => {
     } 
 
     /* Set the Event status based on available free slots */
-    srv.after("READ", "Events", each => {
+    /*srv.after("READ", "Events", each => {
     //Calculate Release and Processing Criticality
         if (each.availableFreeSlots > 0 ) {
             each["statusCode"] = 2 ;
@@ -25,13 +25,12 @@ module.exports = cds.service.impl(srv => {
         }
         
     }); 
-
+*/
         /* dont allow completed events to be deleted */
     srv.on("DELETE", "Events", async (req, next) => {
          const { Events } = srv.entities;
          const tx = srv.transaction(req);
-         const result = await tx.read(Events).columns("statusCode").where({ ID: req.data.ID,
-                                                              IsActiveEntity: true });
+         const result = await tx.read(Events).columns("statusCode").where({ ID: req.data.ID });
         //TODO: check the correct status codes (lifeCycle at Operation level?)
         if (result[0].statusCode === 3) {
             //TODO: how to send localized error messages?
@@ -43,6 +42,32 @@ module.exports = cds.service.impl(srv => {
         }
     });
 
+    srv.on("cancel", async req => {
+        try {
+            const { Events } = srv.entities;
+            const tx = cds.transaction(req);
+            const events = await tx.run(SELECT.from(Events).where({ ID: req.params[0] }));//({ ID: 1 }));//
+           
+            let eventIDs = [];
+            events.forEach(event => {
+                eventIDs.push(event.ID);
+            });
+
+            //update cancellation status of event 
+            let eventsRes = await tx.run(
+            UPDATE(Events).set({statusCode : "Cancelled"}).where("ID in", eventIDs));
+
+            if (eventsRes != eventIDs.length) {
+                req.error("Action not successfull");
+            }else{
+                //success action
+            }
+      
+        } catch (error) {
+            req.error(error);
+        }
+
+     });
     
     /*
         const { Participants } = srv.entities ('sap.cae.eventmanagement.Participants')

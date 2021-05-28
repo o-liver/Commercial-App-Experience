@@ -23,7 +23,7 @@ GET {{server}}/eventmanager/Events?
 # Browse Events with Participants
 GET {{server}}/eventmanager/Events?
   # &$select=ID,title,descr,date
-   &$expand=participants 
+   &$expand=confirmedParticipants 
   # &$expand=participants 
   # &sap-language=de
 
@@ -47,7 +47,7 @@ POST {{server}}/eventmanager/Events
 Content-Type: application/json;IEEE754Compatible=true
 
 {
-  "identifier": "14",
+  "identifier": "16",
   "title": "SAP Global All Hands",
   "description": "SAP Global All Hands in Germany",
   //"date": "2020-05-01:00:00.000Z",
@@ -56,6 +56,27 @@ Content-Type: application/json;IEEE754Compatible=true
   //"currency": { "code": "USD" }
   //"currency_code":  "USD" 
 }
+### ------------------------------------------------------------------------
+
+GET {{server}}/eventmanager/Events(53306711-e22a-4199-a26b-9cff0a138891)
+### ------------------------------------------------------------------------
+# call action cancel
+POST {{server}}/eventmanager/Events(db6feb31-2a07-4dfd-b2fa-03af4937c307)/EventManager.cancel
+Content-Type: application/json;IEEE754Compatible=true
+
+{
+    
+}
+
+### ------------------------------------------------------------------------
+
+# Browse Events without Participants
+GET {{server}}/eventmanager/Events?
+  # &$select=ID,title,descr,date
+  # &$expand=Participants
+  # &sap-language=de
+### ------------------------------------------------------------------------
+
 ### ------------------------------------------------------------------------
 # Create Participant
 POST {{server}}/eventmanager/Participants
