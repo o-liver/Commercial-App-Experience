@@ -3,14 +3,16 @@ namespace sap.cae.eventmanagement;
 
 /* Event header Entity */
 entity Events : managed, cuid {   
-    identifier : String;
-    title  :  String(100);
-    description  :  String(500);
-    date   : DateTime;
-    maxParticipantsNumber : Integer;
-    participantsFeeAmount  : Decimal(6,2);
-    currency : Currency;
-    participants : Composition of many Participants on participants.parent = $self
+    identifier              : String;
+    title                   :  String(100);
+    description             :  String(500);
+    date                    : DateTime;
+    maxParticipantsNumber   : Integer;
+    availableFreeSlots      : Integer;
+    participantsFeeAmount   : Decimal(6,2);
+    currency                : Currency;
+    statusCode              : EventStatus;
+    participants            : Composition of many Participants on participants.parent = $self
     //title  : localized String(111);
     //descr  : localized String(1111); 
 }
@@ -30,4 +32,10 @@ type Status : Integer enum{
   InProcess = 1;
   Confirmed = 2;
   Cancelled = 3;
+}
+
+type EventStatus : Integer enum{
+  Available = 1;
+  Booked    = 2;
+  Completed = 3;
 }

@@ -1,5 +1,5 @@
 using { sap.cae.eventmanagement as eventmanagement } from '../db/event';
-service EventManager @(path:'eventmanager') {
+service EventManager @(path:'eventmanager', impl : './eventmanager-service.js') {
   entity Events as projection on eventmanagement.Events;
   entity Participants as projection on eventmanagement.Participants;
 

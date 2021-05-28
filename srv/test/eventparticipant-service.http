@@ -14,7 +14,7 @@ GET {{server}}/eventparticipant/$metadata
 # Browse Events 
 GET {{server}}/eventparticipant/Events?
   # &$select=ID,title,descr,date
-   &$expand=Participants
+  # &$expand=Participants
   # &sap-language=de
 
 ### ------------------------------------------------------------------------

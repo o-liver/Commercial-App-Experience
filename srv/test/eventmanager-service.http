@@ -18,14 +18,13 @@ GET {{server}}/eventmanager/Events?
   # &$select=ID,title,descr,date
   # &$expand=Participants
   # &sap-language=de
-
 ### ------------------------------------------------------------------------
 
 # Browse Events with Participants
 GET {{server}}/eventmanager/Events?
   # &$select=ID,title,descr,date
    &$expand=participants 
-   &$expand=participants 
+  # &$expand=participants 
   # &sap-language=de
 
 ### ------------------------------------------------------------------------
@@ -48,7 +47,7 @@ POST {{server}}/eventmanager/Events
 Content-Type: application/json;IEEE754Compatible=true
 
 {
-  "ID": 12,
+  "identifier": "14",
   "title": "SAP Global All Hands",
   "description": "SAP Global All Hands in Germany",
   //"date": "2020-05-01:00:00.000Z",
