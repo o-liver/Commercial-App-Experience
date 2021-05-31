@@ -23,9 +23,6 @@ service EventManagerService @(path:'eventmanager', impl : './eventmanager-servic
     // Cancel participation on behalf
 
 
-
-
-
                 /* Cancelled list of participants */
   // entity CancelledParticipants as select eventmanagement.Participants{ * } where status = 3;
 }
