@@ -23,8 +23,8 @@ GET {{server}}/eventmanager/Events?
 # Browse Events with Participants
 GET {{server}}/eventmanager/Events?
   # &$select=ID,title,descr,date
-   &$expand=confirmedParticipants 
-  # &$expand=participants 
+  # &$expand=confirmedParticipants 
+   &$expand=participants 
   # &sap-language=de
 
 ### ------------------------------------------------------------------------
@@ -47,27 +47,58 @@ POST {{server}}/eventmanager/Events
 Content-Type: application/json;IEEE754Compatible=true
 
 {
-  "identifier": "16",
+  "identifier": "18",
   "title": "SAP Global All Hands",
   "description": "SAP Global All Hands in Germany",
   //"date": "2020-05-01:00:00.000Z",
-  "maxParticipantsNumber": 10000,
+  "maxParticipantsNumber": 2,
   "participantsFeeAmount": "10.00"
   //"currency": { "code": "USD" }
   //"currency_code":  "USD" 
 }
 ### ------------------------------------------------------------------------
 
-GET {{server}}/eventmanager/Events(53306711-e22a-4199-a26b-9cff0a138891)
+# Delete Event
+DELETE  {{server}}/eventmanager/Events(097a9d38-d5a1-43f5-ad16-fe0ea69333f1)
+
+### ------------------------------------------------------------------------
+
+GET {{server}}/eventmanager/Events(b97e9586-d74b-4d96-b2e0-725ef419325a)
 ### ------------------------------------------------------------------------
 # call action cancel
-POST {{server}}/eventmanager/Events(db6feb31-2a07-4dfd-b2fa-03af4937c307)/EventManager.cancel
+POST {{server}}/eventmanager/Events(097a9d38-d5a1-43f5-ad16-fe0ea69333f1)/EventManager.cancel
 Content-Type: application/json;IEEE754Compatible=true
 
 {
     
 }
 
+### ------------------------------------------------------------------------
+# call action publish
+POST {{server}}/eventmanager/Events(b97e9586-d74b-4d96-b2e0-725ef419325a)/EventManager.publish
+Content-Type: application/json;IEEE754Compatible=true
+
+{
+    
+}
+
+### ------------------------------------------------------------------------
+# call action block
+POST {{server}}/eventmanager/Events(b97e9586-d74b-4d96-b2e0-725ef419325a)/EventManager.block
+Content-Type: application/json;IEEE754Compatible=true
+
+{
+    
+}
+
+### ------------------------------------------------------------------------
+# call action complete
+POST {{server}}/eventmanager/Events(b97e9586-d74b-4d96-b2e0-725ef419325a)/EventManager.complete
+Content-Type: application/json;IEEE754Compatible=true
+
+{
+    
+}
 ### ------------------------------------------------------------------------
 
 # Browse Events without Participants
@@ -83,12 +114,12 @@ POST {{server}}/eventmanager/Participants
 Content-Type: application/json;IEEE754Compatible=true
 
 {
-  "parent_ID":1 ,
-  "ID": 11,
+  "parent_ID":"2bc37a8d-0f16-4a7e-877c-25930d225174" ,
+  "identifier": "11",
   "name": "Murthy v",
   "email": "murthy.v@sap.com",
   "mobileNumber": "+91 9945933229",
-  "statusCode": 2  
+  "statusCode": 2
 }
 
 
