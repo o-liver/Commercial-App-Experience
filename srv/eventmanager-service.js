@@ -5,15 +5,28 @@ const cds = require('@sap/cds')
 
 module.exports = cds.service.impl(srv => {
 
-    srv.after('CREATE', 'Events', each => _initialiseAvailableFreeSlots(each))
-    
-    /** Function to initialize the available free slots in an event along with status  */ 
-    function _initialiseAvailableFreeSlots (each) { 
-        each.availableFreeSlots = each.maxParticipantsNumber
-        
-        //set the status of event to be available
-        each.statusCode = 1
-    } 
+   // set the initial value for available slots and status of the event. 
+   srv.before("CREATE", "Events", async req => {
+        try {
+            
+            req.data.statusCode = 0;
+            req.data.availableFreeSlots = req.data.maxParticipantsNumber ;
+        } catch (error) {
+            req.error(error);
+        }
+    })
+
+       // set the initial value for available slots and status of the event. 
+   srv.after("UPDATE", "Events", async req => {
+        try {
+            if ( req.data.maxParticipantsNumber === req.data.confirmedParticipants)
+            {
+                req.data.statusCode = 2;
+            }
+        } catch (error) {
+            req.error(error);
+        }
+    })
 
     /* Set the Event status based on available free slots */
     /*srv.after("READ", "Events", each => {
@@ -32,7 +45,7 @@ module.exports = cds.service.impl(srv => {
          const tx = srv.transaction(req);
          const result = await tx.read(Events).columns("statusCode").where({ ID: req.data.ID });
         //TODO: check the correct status codes (lifeCycle at Operation level?)
-        if (result[0].statusCode === 3) {
+        if (result[0].statusCode === 1 || result[0].statusCode === 2 || result[0].statusCode === 3 || result[0].statusCode === 4) {
             //TODO: how to send localized error messages?
             req.reject(409, "Deletion is rejected : Cannot delete completed Events");
             return req;
@@ -46,19 +59,111 @@ module.exports = cds.service.impl(srv => {
         try {
             const { Events } = srv.entities;
             const tx = cds.transaction(req);
-            const events = await tx.run(SELECT.from(Events).where({ ID: req.params[0] }));//({ ID: 1 }));//
+            const events = await tx.run(SELECT.from(Events).where({ ID: req.params[0] }));
            
             let eventIDs = [];
             events.forEach(event => {
-                eventIDs.push(event.ID);
+                
+                if (event.statusCode === 3){
+                    req.error("Action not successfull : Completed event "+event.identifier +" cannot be cancelled");
+                }else{
+                    eventIDs.push(event.ID);
+                }
             });
 
             //update cancellation status of event 
             let eventsRes = await tx.run(
-            UPDATE(Events).set({statusCode : "Cancelled"}).where("ID in", eventIDs));
+            UPDATE(Events).set({statusCode : 5 }).where("ID in", eventIDs));
 
             if (eventsRes != eventIDs.length) {
                 req.error("Action not successfull");
+            }else{
+                //success action
+            }
+      
+        } catch (error) {
+            req.error(error);
+        }
+
+     });
+
+     srv.on("complete", async req => {
+        try {
+            const { Events } = srv.entities;
+            const tx = cds.transaction(req);
+            const events = await tx.run(SELECT.from(Events).where({ ID: req.params[0] }));
+           
+            let eventIDs = [];
+            events.forEach(event => {
+                            
+                    eventIDs.push(event.ID);
+              
+            });
+
+            //update cancellation status of event 
+            let eventsRes = await tx.run(
+            UPDATE(Events).set({statusCode : 3 }).where("ID in", eventIDs));
+
+            if (eventsRes != eventIDs.length) {
+                req.error("Complete Action not successfull");
+            }else{
+                //success action
+            }
+      
+        } catch (error) {
+            req.error(error);
+        }
+
+     });
+
+     srv.on("block", async req => {
+        try {
+            const { Events } = srv.entities;
+            const tx = cds.transaction(req);
+            const events = await tx.run(SELECT.from(Events).where({ ID: req.params[0] }));
+           
+            let eventIDs = [];
+            events.forEach(event => {
+                
+                    eventIDs.push(event.ID);
+        
+            });
+
+            //update cancellation status of event 
+            let eventsRes = await tx.run(
+            UPDATE(Events).set({statusCode : 4 }).where("ID in", eventIDs));
+
+            if (eventsRes != eventIDs.length) {
+                req.error("Block Action not successfull");
+            }else{
+                //success action
+            }
+      
+        } catch (error) {
+            req.error(error);
+        }
+
+     });
+
+     srv.on("publish", async req => {
+        try {
+            const { Events } = srv.entities;
+            const tx = cds.transaction(req);
+            const events = await tx.run(SELECT.from(Events).where({ ID: req.params[0] }));
+           
+            let eventIDs = [];
+            events.forEach(event => {
+
+                    eventIDs.push(event.ID);
+                
+            });
+
+            //update cancellation status of event 
+            let eventsRes = await tx.run(
+            UPDATE(Events).set({statusCode : 1 }).where("ID in", eventIDs));
+
+            if (eventsRes != eventIDs.length) {
+                req.error("Publish Action not successfull");
             }else{
                 //success action
             }
