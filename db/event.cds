@@ -47,4 +47,3 @@ type EventStatus : Integer enum{
   // Completed events cannot be cancelled / blocked / published 
   // NotReleased and Cancelled events can be deleted  ( Published , Booked , Completed , Blocked events cannot be deleted)
 }
-   
