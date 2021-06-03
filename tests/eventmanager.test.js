@@ -13,7 +13,7 @@ describe('Events: OData Protocol Level Testing', () => {
      
    it('Service $metadata document', async () => { 
      const response = await request 
-       .get('/browse/$metadata') 
+       .get('/eventmanager/$metadata') 
        .expect('Content-Type', /^application\/xml/) 
        .expect(200) 
  
@@ -27,15 +27,17 @@ describe('Events: OData Protocol Level Testing', () => {
     
    it('Get with select, expand and localized', async () => { 
      const response = await request 
-       .get('/browse/Events?$select=ID,title,description,date,maxParticipantsNumber,participantsFeeAmount,currency&$expand=Participants') 
+       .get('/eventmanager/Events?$select=ID,title,description,date,maxParticipantsNumber,participantsFeeAmount,currency') 
        .expect('Content-Type', /^application\/json/) 
        .expect(200) 
  
  
      expect(response.body.value).toEqual([ 
        { 
-         ID: 1, title: "SAP Teched", description: "SME Teched @Palma", maxParticipantsNumber: 1000, participantsFeeAmount: 100,
-         Participants: { ID: 1, name: "Murthy V", email: "murthy.v@sap.com", mobileNumber: "+91 9945933229" , statusCode: "Confirmed"} 
+         ID: "1", title: "SAP Teched", description: "SME Teched @Palma", maxParticipantsNumber: 1000, participantsFeeAmount: 100 , "date": "2020-03-01T00:00:00Z"
+       },
+       { 
+         ID: "2", title: "ByD All Hands", description: "SME All Hands @Bangalore", maxParticipantsNumber: 100, participantsFeeAmount: 200 , "date": "2021-05-01T00:00:00Z"
        }
      ]) 
    }) 
@@ -58,7 +60,7 @@ describe('Events : CDS Service Level Testing', () => {
  
      expect(events).toMatchObject([ 
        { title: 'SAP Teched' }, 
-       { title: 'SAP Teched' }
+       { title: 'ByD All Hands' }
      ]) 
    }) 
 })
