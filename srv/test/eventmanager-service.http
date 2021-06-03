@@ -66,7 +66,7 @@ DELETE  {{server}}/eventmanager/Events(097a9d38-d5a1-43f5-ad16-fe0ea69333f1)
 GET {{server}}/eventmanager/Events(b97e9586-d74b-4d96-b2e0-725ef419325a)
 ### ------------------------------------------------------------------------
 # call action cancel
-POST {{server}}/eventmanager/Events(097a9d38-d5a1-43f5-ad16-fe0ea69333f1)/EventManager.cancel
+POST {{server}}/eventmanager/Events(0d07f1ec-931e-4804-af1c-c65556c41c73)/EventManager.cancel
 Content-Type: application/json;IEEE754Compatible=true
 
 {
@@ -75,7 +75,7 @@ Content-Type: application/json;IEEE754Compatible=true
 
 ### ------------------------------------------------------------------------
 # call action publish
-POST {{server}}/eventmanager/Events(b97e9586-d74b-4d96-b2e0-725ef419325a)/EventManager.publish
+POST {{server}}/eventmanager/Events(0d07f1ec-931e-4804-af1c-c65556c41c73)/EventManager.publish
 Content-Type: application/json;IEEE754Compatible=true
 
 {
@@ -84,7 +84,7 @@ Content-Type: application/json;IEEE754Compatible=true
 
 ### ------------------------------------------------------------------------
 # call action block
-POST {{server}}/eventmanager/Events(b97e9586-d74b-4d96-b2e0-725ef419325a)/EventManager.block
+POST {{server}}/eventmanager/Events(e225b5f4-29eb-4e39-86ab-dc29ac577786)/EventManager.block
 Content-Type: application/json;IEEE754Compatible=true
 
 {
@@ -93,7 +93,7 @@ Content-Type: application/json;IEEE754Compatible=true
 
 ### ------------------------------------------------------------------------
 # call action complete
-POST {{server}}/eventmanager/Events(b97e9586-d74b-4d96-b2e0-725ef419325a)/EventManager.complete
+POST {{server}}/eventmanager/Events(e225b5f4-29eb-4e39-86ab-dc29ac577786)/EventManager.complete
 Content-Type: application/json;IEEE754Compatible=true
 
 {

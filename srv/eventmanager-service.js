@@ -125,7 +125,11 @@ module.exports = cds.service.impl(srv => {
             let eventIDs = [];
             events.forEach(event => {
                 
+                if (event.statusCode === 3){
+                    req.error("Action not successfull : Completed event "+event.identifier +" cannot be blocked");
+                }else{
                     eventIDs.push(event.ID);
+                }
         
             });
 
@@ -154,7 +158,11 @@ module.exports = cds.service.impl(srv => {
             let eventIDs = [];
             events.forEach(event => {
 
+                 if (event.statusCode === 3){
+                    req.error("Action not successfull : Completed event "+event.identifier +" cannot be published");
+                }else{
                     eventIDs.push(event.ID);
+                }
                 
             });
 

@@ -44,7 +44,7 @@ type EventStatus : Integer enum{
   Cancelled     = 5;
   
   // SAM => 0 -> 1 -> 2 -> 3  , 0 -> 1 -> 3 , 0 -> 1 -> 4 -> 1 ... ,  
-  // Completed events cannot be cancelled 
+  // Completed events cannot be cancelled / blocked / published 
   // NotReleased and Cancelled events can be deleted  ( Published , Booked , Completed , Blocked events cannot be deleted)
 }
    
