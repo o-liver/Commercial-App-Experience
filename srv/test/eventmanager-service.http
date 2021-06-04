@@ -18,13 +18,12 @@ GET {{server}}/eventmanager/Events?
   # &$select=ID,title,descr,date
   # &$expand=Participants
   # &sap-language=de
-
 ### ------------------------------------------------------------------------
 
 # Browse Events with Participants
 GET {{server}}/eventmanager/Events?
   # &$select=ID,title,descr,date
-   &$expand=participants 
+  # &$expand=confirmedParticipants 
    &$expand=participants 
   # &sap-language=de
 
@@ -48,27 +47,115 @@ POST {{server}}/eventmanager/Events
 Content-Type: application/json;IEEE754Compatible=true
 
 {
-  "ID": 12,
+  "identifier": "18",
   "title": "SAP Global All Hands",
   "description": "SAP Global All Hands in Germany",
   //"date": "2020-05-01:00:00.000Z",
-  "maxParticipantsNumber": 10000,
+  "maxParticipantsNumber": 2,
   "participantsFeeAmount": "10.00"
   //"currency": { "code": "USD" }
   //"currency_code":  "USD" 
 }
+### ------------------------------------------------------------------------
+
+# Update Event
+PATCH  {{server}}/eventmanager/Events(9d5e4cda-739d-4c3c-aec9-7bd2feadd1a8)
+Content-Type: application/json;IEEE754Compatible=true
+
+{
+  "participantsFeeAmount": "40.00"
+ }
+### ------------------------------------------------------------------------
+
+# Delete Event
+DELETE  {{server}}/eventmanager/Events(326657e5-819e-487d-a13f-3555267aca1b)
+
+### ------------------------------------------------------------------------
+
+GET {{server}}/eventmanager/Events(b97e9586-d74b-4d96-b2e0-725ef419325a)
+### ------------------------------------------------------------------------
+# call action cancel
+POST {{server}}/eventmanager/Events(0d07f1ec-931e-4804-af1c-c65556c41c73)/EventManager.cancel
+Content-Type: application/json;IEEE754Compatible=true
+
+{
+    
+}
+
+### ------------------------------------------------------------------------
+# call action publish
+POST {{server}}/eventmanager/Events(0d07f1ec-931e-4804-af1c-c65556c41c73)/EventManager.publish
+Content-Type: application/json;IEEE754Compatible=true
+
+{
+    
+}
+
+### ------------------------------------------------------------------------
+# call action block
+POST {{server}}/eventmanager/Events(0aba33af-ba7d-4467-92ac-b8f017c57a3e)/EventManager.block
+Content-Type: application/json;IEEE754Compatible=true
+
+{
+    
+}
+
+### ------------------------------------------------------------------------
+# call action complete
+POST {{server}}/eventmanager/Events(e225b5f4-29eb-4e39-86ab-dc29ac577786)/EventManager.complete
+Content-Type: application/json;IEEE754Compatible=true
+
+{
+    
+}
+### ------------------------------------------------------------------------
+
+# Browse Events without Participants
+GET {{server}}/eventmanager/Events?
+  # &$select=ID,title,descr,date
+  # &$expand=Participants
+  # &sap-language=de
+### ------------------------------------------------------------------------
+
 ### ------------------------------------------------------------------------
 # Create Participant
 POST {{server}}/eventmanager/Participants
 Content-Type: application/json;IEEE754Compatible=true
 
 {
-  "parent_ID":1 ,
-  "ID": 11,
+  "parent_ID":"8938ab79-b8fc-47a6-99e3-a7ec028ce94e" ,
+  "identifier": "11",
   "name": "Murthy v",
   "email": "murthy.v@sap.com",
   "mobileNumber": "+91 9945933229",
-  "statusCode": 2  
+  "statusCode": 2
 }
 
+### ------------------------------------------------------------------------
 
+# Browse Participants with Events (Parent node )
+GET {{server}}/eventmanager/Participants?
+  # &$select=ID,name
+  &$expand=parent
+
+### ------------------------------------------------------------------------
+
+
+### ------------------------------------------------------------------------
+
+# call action block
+POST {{server}}/eventmanager/Events(0aba33af-ba7d-4467-92ac-b8f017c57a3e)/Participants(3fd4c21d-f715-4baf-9d9c-34bba8cc44ac)/Participants.cancelParticipation
+Content-Type: application/json;IEEE754Compatible=true
+
+{
+    
+}
+
+### ------------------------------------------------------------------------
+# call action block
+GET  {{server}}/eventmanager/Participants(3fd4c21d-f715-4baf-9d9c-34bba8cc44ac)
+Content-Type: application/json;IEEE754Compatible=true
+
+{
+    
+}
