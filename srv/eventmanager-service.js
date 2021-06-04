@@ -116,7 +116,7 @@ module.exports = cds.service.impl(srv => {
 
      });
 
-     srv.on("block", async req => {
+     srv.on("block", async req => {  
         try {
             const { Events } = srv.entities;
             const tx = cds.transaction(req);
