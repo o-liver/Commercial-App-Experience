@@ -24,9 +24,25 @@ module.exports = cds.service.impl(srv => {
             let eventIDs = [];
             eventIDs.push(req.data.parent_ID); 
             const events = await EventManager.read(Events).where("ID in", eventIDs);   
-            if (events[0].availableFreeSlots === 0 || events[0].statusCode === 2)
+            if ( events[0].statusCode === 2)
             {
               req.error("Cannot Add Participants : Event is fully booked , try after some time :-) ");  
+            }
+            if ( events[0].statusCode === 3)
+            {
+              req.error("Cannot Add Participants : Event is completed , better luck next time :-) ");  
+            }
+            if ( events[0].statusCode === 4)
+            {
+              req.error("Cannot Add Participants : Event is blocked , try after publishing the event :-) ");  
+            }
+            if ( events[0].statusCode === 5)
+            {
+              req.error("Cannot Add Participants : Event is cancelled , try after publishing the event :-) ");  
+            }
+                        if ( events[0].statusCode === 0)
+            {
+              req.error("Cannot Add Participants : Event is not released , try after publishing the event :-) ");  
             }
         } catch (error) {
             req.error(error);
