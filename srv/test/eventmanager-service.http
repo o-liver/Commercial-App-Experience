@@ -58,8 +58,17 @@ Content-Type: application/json;IEEE754Compatible=true
 }
 ### ------------------------------------------------------------------------
 
+# Update Event
+PATCH  {{server}}/eventmanager/Events(9d5e4cda-739d-4c3c-aec9-7bd2feadd1a8)
+Content-Type: application/json;IEEE754Compatible=true
+
+{
+  "participantsFeeAmount": "40.00"
+ }
+### ------------------------------------------------------------------------
+
 # Delete Event
-DELETE  {{server}}/eventmanager/Events(097a9d38-d5a1-43f5-ad16-fe0ea69333f1)
+DELETE  {{server}}/eventmanager/Events(326657e5-819e-487d-a13f-3555267aca1b)
 
 ### ------------------------------------------------------------------------
 
@@ -84,7 +93,7 @@ Content-Type: application/json;IEEE754Compatible=true
 
 ### ------------------------------------------------------------------------
 # call action block
-POST {{server}}/eventmanager/Events(e225b5f4-29eb-4e39-86ab-dc29ac577786)/EventManager.block
+POST {{server}}/eventmanager/Events(0aba33af-ba7d-4467-92ac-b8f017c57a3e)/EventManager.block
 Content-Type: application/json;IEEE754Compatible=true
 
 {
@@ -114,7 +123,7 @@ POST {{server}}/eventmanager/Participants
 Content-Type: application/json;IEEE754Compatible=true
 
 {
-  "parent_ID":"2bc37a8d-0f16-4a7e-877c-25930d225174" ,
+  "parent_ID":"8938ab79-b8fc-47a6-99e3-a7ec028ce94e" ,
   "identifier": "11",
   "name": "Murthy v",
   "email": "murthy.v@sap.com",
@@ -122,4 +131,31 @@ Content-Type: application/json;IEEE754Compatible=true
   "statusCode": 2
 }
 
+### ------------------------------------------------------------------------
 
+# Browse Participants with Events (Parent node )
+GET {{server}}/eventmanager/Participants?
+  # &$select=ID,name
+  &$expand=parent
+
+### ------------------------------------------------------------------------
+
+
+### ------------------------------------------------------------------------
+
+# call action block
+POST {{server}}/eventmanager/Events(0aba33af-ba7d-4467-92ac-b8f017c57a3e)/Participants(3fd4c21d-f715-4baf-9d9c-34bba8cc44ac)/Participants.cancelParticipation
+Content-Type: application/json;IEEE754Compatible=true
+
+{
+    
+}
+
+### ------------------------------------------------------------------------
+# call action block
+GET  {{server}}/eventmanager/Participants(3fd4c21d-f715-4baf-9d9c-34bba8cc44ac)
+Content-Type: application/json;IEEE754Compatible=true
+
+{
+    
+}

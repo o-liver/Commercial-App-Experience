@@ -12,7 +12,11 @@ service EventManager @(path:'eventmanager', impl : './eventmanager-service.js') 
         action publish() returns Events;
     };
   
-  entity Participants as projection on eventmanagement.Participants;
+  entity Participants as projection on eventmanagement.Participants {
+      *
+  }actions{
+      action cancelParticipation() returns Participants;
+  };
 
 
                 /* Cancelled list of participants */
