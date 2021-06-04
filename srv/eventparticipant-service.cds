@@ -1,5 +1,5 @@
 using { sap.cae.eventmanagement as eventparticipant } from '../db/event';
-service EventParticipant @(path:'eventparticipant') {
+service EventParticipant @(path:'eventparticipant',impl : './eventparticipant-service.js') {
 
     /** For displaying lists of Events */
   @readonly entity Events as projection on eventparticipant.Events
