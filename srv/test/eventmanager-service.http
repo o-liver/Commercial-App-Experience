@@ -84,7 +84,7 @@ Content-Type: application/json;IEEE754Compatible=true
 
 ### ------------------------------------------------------------------------
 # call action publish
-POST {{server}}/eventmanager/Events(bd98ddfe-1fa9-4a71-8a61-5d0015fa16ff)/EventManager.publish
+POST {{server}}/eventmanager/Events(e5f47e1c-e7d7-4957-8294-e51e4f9abe6c)/EventManager.publish
 Content-Type: application/json;IEEE754Compatible=true
 
 {
@@ -123,11 +123,11 @@ POST {{server}}/eventmanager/Participants
 Content-Type: application/json;IEEE754Compatible=true
 
 {
-  "parent_ID":"bd98ddfe-1fa9-4a71-8a61-5d0015fa16ff" ,
+  "parent_ID":"e5f47e1c-e7d7-4957-8294-e51e4f9abe6c" ,
   "identifier": "11",
   "name": "Murthy v",
-  "email": "murthy.v@sap.com",
-  "mobileNumber": "+91 9945933229",
+  "email": "",
+  "mobileNumber": "+49 151 5711abc",
   "statusCode": 2
 }
 
