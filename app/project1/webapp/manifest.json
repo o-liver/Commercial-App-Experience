@@ -1,0 +1,171 @@
+{
+    "_version": "1.32.0",
+    "sap.app": {
+        "id": "sap.cae.eventmanagement.project1",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "applicationVersion": {
+            "version": "1.0.0"
+        },
+        "title": "{{appTitle}}",
+        "description": "{{appDescription}}",
+        "dataSources": {
+            "mainService": {
+                "uri": "/eventmanager/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "4.0"
+                }
+            }
+        },
+        "offline": false,
+        "resources": "resources.json",
+        "sourceTemplate": {
+            "id": "ui5template.fiorielements.v4.lrop",
+            "version": "1.0.0"
+        },
+        "crossNavigation": {
+            "inbounds": {
+                "sap-cae-eventmanagement-project1-inbound": {
+                    "signature": {
+                        "parameters": {},
+                        "additionalParameters": "allowed"
+                    },
+                    "semanticObject": "event",
+                    "action": "event",
+                    "title": "event",
+                    "subTitle": "event",
+                    "icon": ""
+                }
+            }
+        }
+    },
+    "sap.ui": {
+        "technology": "UI5",
+        "icons": {
+            "icon": "",
+            "favIcon": "",
+            "phone": "",
+            "phone@2": "",
+            "tablet": "",
+            "tablet@2": ""
+        },
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        }
+    },
+    "sap.ui5": {
+        "resources": {
+            "js": [],
+            "css": []
+        },
+        "dependencies": {
+            "minUI5Version": "1.76.0",
+            "libs": {
+                "sap.ui.core": {},
+                "sap.fe.templates": {}
+            }
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "uri": "i18n/i18n.properties"
+            },
+            "": {
+                "dataSource": "mainService",
+                "preload": true,
+                "settings": {
+                    "synchronizationMode": "None",
+                    "operationMode": "Server",
+                    "autoExpandSelect": true,
+                    "earlyRequests": true
+                }
+            }
+        },
+        "routing": {
+            "routes": [
+                {
+                    "pattern": ":?query:",
+                    "name": "EventsList",
+                    "target": "EventsList"
+                },
+                {
+                    "pattern": "Events({key}):?query:",
+                    "name": "EventsObjectPage",
+                    "target": "EventsObjectPage"
+                },
+                {
+                    "pattern": "Events({key})/participants({key2}):?query:",
+                    "name": "ParticipantsObjectPage",
+                    "target": "ParticipantsObjectPage"
+                }
+            ],
+            "targets": {
+                "EventsList": {
+                    "type": "Component",
+                    "id": "EventsList",
+                    "name": "sap.fe.templates.ListReport",
+                    "options": {
+                        "settings": {
+                            "entitySet": "Events",
+                            "variantManagement": "Page",
+                            "navigation": {
+                                "Events": {
+                                    "detail": {
+                                        "route": "EventsObjectPage"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "EventsObjectPage": {
+                    "type": "Component",
+                    "id": "EventsObjectPage",
+                    "name": "sap.fe.templates.ObjectPage",
+                    "options": {
+                        "settings": {
+                            "entitySet": "Events",
+                            "navigation": {
+                                "participants": {
+                                    "detail": {
+                                        "route": "ParticipantsObjectPage"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "ParticipantsObjectPage": {
+                    "type": "Component",
+                    "id": "ParticipantsObjectPage",
+                    "name": "sap.fe.templates.ObjectPage",
+                    "options": {
+                        "settings": {
+                            "entitySet": "Participants"
+                        }
+                    }
+                }
+            }
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        }
+    },
+    "sap.platform.abap": {
+        "_version": "1.1.0",
+        "uri": ""
+    },
+    "sap.platform.hcp": {
+        "_version": "1.1.0",
+        "uri": ""
+    },
+    "sap.fiori": {
+        "_version": "1.1.0",
+        "registrationIds": [],
+        "archeType": "transactional"
+    }
+}

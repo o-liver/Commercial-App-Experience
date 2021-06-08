@@ -199,12 +199,15 @@ module.exports = cds.service.impl(srv => {
             //update cancellation status of event 
             let eventsRes = await tx.run(
             UPDATE(Events).set({statusCode : 5 }).where("ID in", eventIDs));
+            let data = await tx.read(Events).where("ID in", eventIDs);
+
 
             if (eventsRes != eventIDs.length) {
                 req.error("Action not successfull");
             }else{
                 //success action
             }
+            return data;
       
         } catch (error) {
             req.error(error);
@@ -228,13 +231,16 @@ module.exports = cds.service.impl(srv => {
             //update cancellation status of event 
             let eventsRes = await tx.run(
             UPDATE(Events).set({statusCode : 3 }).where("ID in", eventIDs));
+            
+            let data = await tx.read(Events).where("ID in", eventIDs);
+
 
             if (eventsRes != eventIDs.length) {
                 req.error("Complete Action not successfull");
             }else{
                 //success action
             }
-      
+            return data;
         } catch (error) {
             req.error(error);
         }
@@ -261,12 +267,15 @@ module.exports = cds.service.impl(srv => {
             //update cancellation status of event 
             let eventsRes = await tx.run(
             UPDATE(Events).set({statusCode : 4 }).where("ID in", eventIDs));
+            
+            let data = await tx.read(Events).where("ID in", eventIDs);
 
             if (eventsRes != eventIDs.length) {
                 req.error("Block Action not successfull");
             }else{
                 //success action
             }
+            return data;
       
         } catch (error) {
             req.error(error);
@@ -294,12 +303,15 @@ module.exports = cds.service.impl(srv => {
             //update cancellation status of event 
             let eventsRes = await tx.run(
             UPDATE(Events).set({statusCode : 1 }).where("ID in", eventIDs));
+            let data = await tx.read(Events).where("ID in", eventIDs);
+
 
             if (eventsRes != eventIDs.length) {
                 req.error("Publish Action not successfull");
             }else{
                 //success action
             }
+            return data;
       
         } catch (error) {
             req.error(error);
@@ -324,11 +336,14 @@ module.exports = cds.service.impl(srv => {
             let participantsRes = await tx.run(
             UPDATE(Participants).set({statusCode : 3 }).where("ID in", participantsIDs));
 
+            let data = await tx.read(Participants).where("ID in", participantsIDs);
+
             if (participants != participantsIDs.length) {
                 req.error("Action not successfull");
             }else{
                 //success action
             }
+            return data;
       
         } catch (error) {
             req.error(error);

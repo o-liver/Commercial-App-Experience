@@ -1,3 +1,2 @@
 ID;identifier;title;description;date;maxParticipantsNumber;availableFreeSlots;participantsFeeAmount;currency_code;statusCode
-1;Teched2020;SAP Teched;SME Teched @Palma;2020-03-01;1000;1000;100.00;EUR;0
-2;ByD2021;ByD All Hands;SME All Hands @Bangalore;2021-05-01;100;100;200.00;EUR;0
+79ceab87-300d-4b66-8cc3-f82c679b77ab;Teched2020;SAP Teched;SME Teched @Palma;2020-03-01;1000;1000;100.00;EUR;0
