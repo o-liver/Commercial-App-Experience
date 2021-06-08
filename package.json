@@ -65,6 +65,6 @@
     "version": "v4"
   },
   "sapux": [
-    "app/project1"
+    "app/events"
   ]
 }
