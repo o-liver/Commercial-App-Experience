@@ -3,15 +3,15 @@ namespace sap.cae.eventmanagement;
 
 /* Event header Entity */
 entity Events : managed, cuid {   
-    identifier              : String;
-    title                   :  String(100);
-    description             :  String(500);
-    date                    : DateTime;
-    maxParticipantsNumber   : Integer;
-    availableFreeSlots      : Integer;
-    participantsFeeAmount   : Decimal(6,2);
+    identifier              : String          @title : 'Event ID';
+    title                   :  String(100)    @title : 'Title';
+    description             :  String(500)    @title : 'Description';
+    date                    : DateTime        @title : 'Event Date';
+    maxParticipantsNumber   : Integer         @title : 'Maximum Number of Participants';
+    availableFreeSlots      : Integer         @title : 'Available Free Slots';
+    participantsFeeAmount   : Decimal(6,2)    @title : 'Paricipation Fee';
     currency                : Currency;
-    statusCode              : EventStatus;
+    statusCode              : EventStatus     @title : 'Event Status';
     participants            : Composition of many Participants on participants.parent = $self;
     confirmedParticipants   : Association to many Participants on confirmedParticipants.parent = $self and confirmedParticipants.statusCode = 'Confirmed'
      //title  : localized String(111);
@@ -47,3 +47,14 @@ type EventStatus : Integer enum{
   // Completed events cannot be cancelled / blocked / published 
   // NotReleased and Cancelled events can be deleted  ( Published , Booked , Completed , Blocked events cannot be deleted)
 }
+
+annotate Event with {
+    identifier            @Core.Label : 'Event ID';
+    title                 @Core.Label : 'Title';
+    description           @Core.Label : 'Description';
+    date                  @Core.Label : 'Event Date';
+    maxParticipantsNumber @Core.Label : 'Maximum Number of Participants';
+    availableFreeSlots    @Core.Label : 'Available Free Slots';
+    participantsFeeAmount @Core.Label : 'Pariticipation Fee';
+    statusCode            @Core.Label : 'Event Status';
+  }
