@@ -1,2 +1,2 @@
 
-using from './events/annotations';
+using from './eventmanagement/annotations';

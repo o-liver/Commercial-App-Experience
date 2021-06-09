@@ -65,6 +65,7 @@
     "version": "v4"
   },
   "sapux": [
-    "app/events"
+    "app/events",
+    "app/eventmanagement"
   ]
 }

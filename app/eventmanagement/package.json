@@ -1,7 +1,7 @@
 {
-    "name": "events",
+    "name": "eventmanagement",
     "version": "0.0.1",
-    "description": "A Fiori application.",
+    "description": "Event Management Application",
     "keywords": [
         "ui5",
         "openui5",
