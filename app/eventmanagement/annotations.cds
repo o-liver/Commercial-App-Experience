@@ -34,9 +34,11 @@ annotate EventManager.Events with @(
         }],
             // Object page field groups
         FieldGroup #Values : {
-            Data : [
-            { $Type : 'UI.DataField', Value : description, Label : 'Description' },
-            { $Type : 'UI.DataField', Value : identifier,  Label : 'ID' }
+            Data : [           
+            { $Type : 'UI.DataField', Value : identifier,  Label : 'ID' },
+            { $Type : 'UI.DataField', Value : title,  Label : 'Title' },
+            { $Type : 'UI.DataField', Value : description, Label : 'Description' }
+            
         ]}
     }    
 );
