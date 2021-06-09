@@ -16,30 +16,7 @@ module.exports = cds.service.impl(srv => {
         }
     })
 
-     srv.before("READ", "Events", async req => {
-        try {
-            
-            var test = 1;
-        } catch (error) {
-            req.error(error);
-        }
-    })
-    srv.after("READ", "Events", async req => {
-        try {
-            
-            var test = 1;
-        } catch (error) {
-            req.error(error);
-        }
-    })
-     srv.on("READ", "Events", async req => {
-        try {
-            
-            var test = 1;
-        } catch (error) {
-            req.error(error);
-        }
-    })
+     
 
         function validateEmail(email) {
         var regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
