@@ -16,6 +16,8 @@ module.exports = cds.service.impl(srv => {
         }
     })
 
+     
+
         function validateEmail(email) {
         var regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         if (email.match(regexEmail)) {
@@ -205,7 +207,7 @@ module.exports = cds.service.impl(srv => {
             if (eventsRes != eventIDs.length) {
                 req.error("Action not successfull");
             }else{
-                //success action
+                 req.info("Event Cancelled successfully");
             }
             return data;
       
@@ -238,7 +240,7 @@ module.exports = cds.service.impl(srv => {
             if (eventsRes != eventIDs.length) {
                 req.error("Complete Action not successfull");
             }else{
-                //success action
+                 req.info("Event Completed successfully");
             }
             return data;
         } catch (error) {
@@ -258,6 +260,7 @@ module.exports = cds.service.impl(srv => {
                 
                 if (event.statusCode === 3){
                     req.error("Action not successfull : Completed event "+event.identifier +" cannot be blocked");
+                    
                 }else{
                     eventIDs.push(event.ID);
                 }
@@ -273,7 +276,7 @@ module.exports = cds.service.impl(srv => {
             if (eventsRes != eventIDs.length) {
                 req.error("Block Action not successfull");
             }else{
-                //success action
+                 req.info("Event Blocked successfully");
             }
             return data;
       
@@ -309,7 +312,7 @@ module.exports = cds.service.impl(srv => {
             if (eventsRes != eventIDs.length) {
                 req.error("Publish Action not successfull");
             }else{
-                //success action
+                req.info("Event Published successfully");
             }
             return data;
       
@@ -341,7 +344,7 @@ module.exports = cds.service.impl(srv => {
             if (participants != participantsIDs.length) {
                 req.error("Action not successfull");
             }else{
-                //success action
+                 req.info("Event Participation cancelled successfully");
             }
             return data;
       
