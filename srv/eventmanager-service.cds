@@ -1,7 +1,6 @@
 using { sap.cae.eventmanagement as eventmanagement } from '../db/event';
 service EventManager @(path:'eventmanager', impl : './eventmanager-service.js') {
-  
-
+  //@odata.draft.enabled
   entity Events as projection on eventmanagement.Events {
     *, count( confirmedParticipants.ID ) as participantsCount : Integer  
   } 
