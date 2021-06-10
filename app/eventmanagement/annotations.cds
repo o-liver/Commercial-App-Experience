@@ -1,11 +1,5 @@
 using EventManager as service from 'cae-poc../../../home/user/projects/Commercial-App-Experience/srv/eventmanager-service';
 
-annotate EventManager.Events with {
-
-    availableFreeSlots  @Core.Immutable;
-    statusCode          @Core.Immutable;
-
-}
 
 annotate EventManager.Events with @(
     UI : 
@@ -65,6 +59,15 @@ annotate EventManager.Events with @(
         },
         {
             $Type  : 'UI.CollectionFacet',
+            Label  : 'Participants',
+            ID     : 'Participants',
+            Facets : [
+            { 
+                $Type : 'UI.ReferenceFacet', Target : 'participants@UI.LineItem', ID : 'Participants'
+            }],
+        },
+        {
+            $Type  : 'UI.CollectionFacet',
             Label  : 'Administative Data',
             ID     : 'AdministrativeData',
             Facets : [
@@ -105,3 +108,62 @@ annotate EventManager.Events with @(
         ]}
     }    
 );
+
+annotate EventManager.Participants with @(
+        SelectionFields : [ identifier, email,mobileNumber ],
+        UI.LineItem : [
+            {
+                $Type : 'UI.DataField',
+                Value : identifier,
+                Label  : 'ID',  
+                ![@UI.Importance] : #High,
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : email,
+                Label  : 'Email',  
+                ![@UI.Importance] : #High,
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : mobileNumber,
+                Label  : 'Mobile Number',  
+                ![@UI.Importance] : #High,
+            },
+        ],
+       HeaderInfo         : 
+       {
+            $Type          : 'UI.HeaderInfoType',
+            TypeName       : 'Event',
+            TypeNamePlural : 'Events',
+            Title          : { $Type : 'UI.DataField', Value : identifier  },
+            Description    : { $Type : 'UI.DataField', Value : email }
+        },
+        
+       
+        Facets             : [
+        {
+            $Type  : 'UI.CollectionFacet',
+            Label  : 'Event General Data',
+            ID     : 'GeneralData',
+            Facets : [
+            { 
+                $Type : 'UI.ReferenceFacet', Target : ![@UI.FieldGroup#Values], ID : 'GeneralData'
+            }],
+        },
+        ],
+            // Object page field groups
+        FieldGroup #Values : {
+            Data : [           
+            { $Type : 'UI.DataField', Value : identifier, Label : 'Participant ID' },
+            { $Type : 'UI.DataField', Value : email,  Label : 'Email ID' },
+            { $Type : 'UI.DataField', Value : mobileNumber, Label : 'Mobile Number' }     
+            
+            
+            
+        ]},
+
+  
+    
+);
+

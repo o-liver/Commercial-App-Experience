@@ -80,6 +80,11 @@
                     "pattern": "Events({key}):?query:",
                     "name": "EventsObjectPage",
                     "target": "EventsObjectPage"
+                },
+                {
+                    "pattern": "Events({key})/participants({key2}):?query:",
+                    "name": "ParticipantsObjectPage_participants",
+                    "target": "ParticipantsObjectPage_participants"
                 }
             ],
             "targets": {
@@ -97,6 +102,10 @@
                                         "route": "EventsObjectPage"
                                     }
                                 }
+                            },
+                            "initialLoad": true,
+                            "controlConfiguration": {
+                                "@com.sap.vocabularies.UI.v1.LineItem": {}
                             }
                         }
                     }
@@ -107,7 +116,33 @@
                     "name": "sap.fe.templates.ObjectPage",
                     "options": {
                         "settings": {
-                            "entitySet": "Events"
+                            "entitySet": "Events",
+                            "navigation": {
+                                "participants": {
+                                    "detail": {
+                                        "route": "ParticipantsObjectPage_participants"
+                                    }
+                                }
+                            },
+                            "content": {}
+                        }
+                    }
+                },
+                "ParticipantsObjectPage_participants": {
+                    "type": "Component",
+                    "id": "ParticipantsObjectPage_participants",
+                    "name": "sap.fe.templates.ObjectPage",
+                    "options": {
+                        "settings": {
+                            "entitySet": "Participants",
+                            "navigation": {},
+                            "editableHeaderContent": true,
+                            "content": {
+                                "header": {
+                                    "visible": true
+                                }
+                            },
+                            "sectionLayout": "Page"
                         }
                     }
                 }
