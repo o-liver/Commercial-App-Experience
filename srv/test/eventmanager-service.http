@@ -123,11 +123,11 @@ POST {{server}}/eventmanager/Participants
 Content-Type: application/json;IEEE754Compatible=true
 
 {
-  "parent_ID":"e5f47e1c-e7d7-4957-8294-e51e4f9abe6c" ,
-  "identifier": "11",
+  "parent_ID":"79ceab87-300d-4b66-8cc3-f82c679b77ac" ,
+  "identifier": "14",
   "name": "Murthy v",
   "email": "",
-  "mobileNumber": "+49 151 5711abc",
+  "mobileNumber": "+49 151 5711123",
   "statusCode": 2
 }
 
@@ -140,11 +140,11 @@ GET {{server}}/eventmanager/Participants?
 
 ### ------------------------------------------------------------------------
 
-
+GET {{server}}/eventmanager/Events(79ceab87-300d-4b66-8cc3-f82c679b77ac)/Participants(848f961c-70ec-4f9c-b23b-bb1fffee2be2)
 ### ------------------------------------------------------------------------
 
 # call action block
-POST {{server}}/eventmanager/Events(0aba33af-ba7d-4467-92ac-b8f017c57a3e)/Participants(3fd4c21d-f715-4baf-9d9c-34bba8cc44ac)/Participants.cancelParticipation
+POST {{server}}/eventmanager/Events(79ceab87-300d-4b66-8cc3-f82c679b77ac)/Participants(848f961c-70ec-4f9c-b23b-bb1fffee2be2)
 Content-Type: application/json;IEEE754Compatible=true
 
 {
@@ -153,7 +153,7 @@ Content-Type: application/json;IEEE754Compatible=true
 
 ### ------------------------------------------------------------------------
 # call action block
-GET  {{server}}/eventmanager/Participants(3fd4c21d-f715-4baf-9d9c-34bba8cc44ac)
+POST   {{server}}/eventmanager/Participants(80cb034c-1f79-42a8-af03-ffc402274ec8)/EventManager.cancelParticipation
 Content-Type: application/json;IEEE754Compatible=true
 
 {
