@@ -112,8 +112,9 @@ annotate EventManager.Events with @(
 annotate EventManager.Participants with @(
 UI : 
     { 
-        SelectionFields : [ identifier, email,mobileNumber ],
+        SelectionFields : [ identifier, email,mobileNumber,statusCode ],
         LineItem : [
+             { $Type : 'UI.DataFieldForAction', Label  : 'Cancel Participation',     Action : 'EventManager.cancelParticipation'  },
             {
                 $Type : 'UI.DataField',
                 Value : identifier,
@@ -131,6 +132,12 @@ UI :
                 Value : mobileNumber,
                 Label  : 'Mobile Number',  
                 ![@UI.Importance] : #High,
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : statusCode,
+                Label  : 'Status',  
+                ![@UI.Importance] : #High,
             }
         ],
        HeaderInfo         : 
@@ -138,8 +145,13 @@ UI :
             $Type          : 'UI.HeaderInfoType',
             TypeName       : 'Participant',
             TypeNamePlural : 'Participants',
-            Title          : { $Type : 'UI.DataField', Value : identifier  }
+            Title          : { $Type : 'UI.DataField', Value : identifier   },
+            Description    : { $Type : 'UI.DataField', Value : name         }
+            
         },
+        HeaderFacets: [
+            { $Type : 'UI.ReferenceFacet', Target : '@UI.FieldGroup#Created'}     
+        ],
 
         Facets             : [
         {
@@ -151,13 +163,42 @@ UI :
                 $Type : 'UI.ReferenceFacet', Target : ![@UI.FieldGroup#ParticipantDetails], ID : 'GeneralData'
             }],
         },
+        
+        {
+            $Type  : 'UI.CollectionFacet',
+            Label  : 'Administative Data',
+            ID     : 'AdministrativeData',
+            Facets : [
+            { 
+                $Type : 'UI.ReferenceFacet', Target : ![@UI.FieldGroup#AdminData], ID : 'AdministrativeData'
+            }],
+        }
         ],
             // Object page field groups
         FieldGroup #ParticipantDetails : {
             Data : [           
-            { $Type : 'UI.DataField', Value : identifier, Label : 'Participant ID' }   
+            { $Type : 'UI.DataField', Value : identifier,       Label : 'Participant ID'    } ,
+            { $Type : 'UI.DataField', Value : name,             Label : 'Name'    } ,
+            { $Type : 'UI.DataField', Value : email,            Label : 'Email ID'          } ,
+            { $Type : 'UI.DataField', Value : mobileNumber,     Label : 'Mobile Number'     }  
             
             
+            
+        ]},
+        FieldGroup #AdminData : {
+            Data : [           
+            { $Type : 'UI.DataField', Value : createdBy,  Label : 'Created By' },
+            { $Type : 'UI.DataField', Value : createdAt,  Label : 'Created On' },
+            { $Type : 'UI.DataField', Value : modifiedBy, Label : 'Changed By' },
+            { $Type : 'UI.DataField', Value : modifiedAt, Label : 'Changed On' }               
+            
+            
+        ]} ,
+        FieldGroup #Created : {
+            Data : [           
+            { $Type : 'UI.DataField', Value : createdAt,  Label : 'Created On' },
+            { $Type : 'UI.DataField', Value : modifiedAt,  Label : 'Changed On' }
+                   
             
         ]}
 

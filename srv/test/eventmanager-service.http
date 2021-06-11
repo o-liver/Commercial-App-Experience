@@ -153,9 +153,23 @@ Content-Type: application/json;IEEE754Compatible=true
 
 ### ------------------------------------------------------------------------
 # call action block
-POST   {{server}}/eventmanager/Participants(80cb034c-1f79-42a8-af03-ffc402274ec8)/EventManager.cancelParticipation
+POST   {{server}}/eventmanager/Participants(e03dd13e-66a6-4f87-911b-0a03dbcceaf4)/EventManager.cancelParticipation
 Content-Type: application/json;IEEE754Compatible=true
 
 {
     
 }
+### ------------------------------------------------------------------------
+
+GET {{server}}/eventmanager/Participants(e03dd13e-66a6-4f87-911b-0a03dbcceaf4)
+### ------------------------------------------------------------------------
+# call action block
+POST   {{server}}/eventmanager/Events(79ceab87-300d-4b66-8cc3-f82c679b77ab)/participants(faa6334b-854f-4050-bc4c-1839703d8ca5)/EventManager.cancelParticipation
+Content-Type: application/json;IEEE754Compatible=true
+
+{
+    
+}
+### ------------------------------------------------------------------------
+
+Events(79ceab87-300d-4b66-8cc3-f82c679b77ab)/participants(c3bb78dd-615f-484e-ad66-abb5f750e5db)/EventManager.cancelParti
