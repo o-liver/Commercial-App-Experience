@@ -84,8 +84,8 @@ annotate EventManager.Events with @(
             { $Type : 'UI.DataField', Value : date, Label : 'Event Date' },
             { $Type : 'UI.DataField', Value : maxParticipantsNumber, Label : 'Maximum Allowed Participants' },
             { $Type : 'UI.DataField', Value : maxParticipantsNumber, Label : 'Maximum Allowed Participants' },
-            { $Type : 'UI.DataField', Value : availableFreeSlots, Label : 'Available Free Slots' },    
-            { $Type : 'UI.DataField', Value : participantsFeeAmount, Label : 'Participation Fee' },          
+            { $Type : 'UI.DataField', Value : availableFreeSlots, Label : 'Available Free Slots' }//,    
+           // { $Type : 'UI.DataField', Value : participantsFeeAmount, Label : 'Participation Fee' },          
             
             
             

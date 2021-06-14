@@ -123,11 +123,11 @@ POST {{server}}/eventmanager/Participants
 Content-Type: application/json;IEEE754Compatible=true
 
 {
-  "parent_ID":"79ceab87-300d-4b66-8cc3-f82c679b77ac" ,
+  "parent_ID":"06e877e7-7ceb-4c61-9c8f-85a3a5e00f3f" ,
   "identifier": "14",
   "name": "Murthy v",
   "email": "",
-  "mobileNumber": "+49 151 5711123",
+  "mobileNumber": "+49 151 5711123a",
   "statusCode": 2
 }
 
@@ -172,4 +172,20 @@ Content-Type: application/json;IEEE754Compatible=true
 }
 ### ------------------------------------------------------------------------
 
-Events(79ceab87-300d-4b66-8cc3-f82c679b77ab)/participants(c3bb78dd-615f-484e-ad66-abb5f750e5db)/EventManager.cancelParti
+Events(79ceab87-300d-4b66-8cc3-f82c679b77ab)/participants(c3bb78dd-615f-484e-ad66-abb5f750e5db)/EventManager.cancelParticipation
+
+### ------------------------------------------------------------------------
+# call action block
+POST   {{server}}/eventmanager/Events(ID=79ceab87-300d-4b66-8cc3-f82c679b77ab,IsActiveEntity=true)/participants(ID=c65661aa-578e-47e3-9804-8d7940d5a003,IsActiveEntity=true)/EventManager.cancelParticipation
+Content-Type: application/json;IEEE754Compatible=true
+
+{
+    
+}
+### ------------------------------------------------------------------------
+
+get {{server}}/eventmanager/Events(ID=79ceab87-300d-4b66-8cc3-f82c679b77ab,IsActiveEntity=true)/participants(ID=c65661aa-578e-47e3-9804-8d7940d5a003,IsActiveEntity=true)
+
+### ------------------------------------------------------------------------
+
+get {{server}}/eventmanager/Events(ID=79ceab87-300d-4b66-8cc3-f82c679b77ab,IsActiveEntity=false)/participants(ID=c65661aa-578e-47e3-9804-8d7940d5a003,IsActiveEntity=false)
