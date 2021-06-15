@@ -388,7 +388,8 @@ module.exports = cds.service.impl(srv => {
         try {
 
             const id = (req.params.pop()).ID;
-            const isActiveEntity = (req.params.pop()).IsActiveEntity;
+            const eventID = (req.params.pop()).ID;
+            //const isActiveEntity = (req.params.pop()).IsActiveEntity;
 
             let participantData = await SELECT.from("sap.cae.eventmanagement.Participants").where({ ID: id });
             
@@ -401,6 +402,16 @@ module.exports = cds.service.impl(srv => {
  
             // return error on execution of action on draft instance
             if (participantData.length === 1){
+
+                // reduce the available slots by 1
+                const events = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: eventID });
+                const availableFreeSlots = events[0].availableFreeSlots - 1;
+
+                // update the available slots and status of event ( if the available slots is zero then set the event status to blocked)
+                const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({ availableFreeSlots: availableFreeSlots , 
+                                                           statusCode: (availableFreeSlots === 0 ? 2 : events[0].statusCode)})
+                                                    .where({ ID: eventID });
+
                 //update cancellation status of participant 
                 participantsRes = await 
                 UPDATE("sap.cae.eventmanagement.Participants").set({statusCode : 2 }).where({ ID: id });
