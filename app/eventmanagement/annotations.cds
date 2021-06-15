@@ -114,13 +114,20 @@ UI :
     { 
         SelectionFields : [ identifier, email,mobileNumber,statusCode ],
         LineItem : [
-             { $Type : 'UI.DataFieldForAction', Label  : 'Cancel Participation',     Action : 'EventManager.cancelParticipation'  },
+            { $Type : 'UI.DataFieldForAction', Label  : 'Confirm Participation',    Action : 'EventManager.confirmParticipation' },
+            { $Type : 'UI.DataFieldForAction', Label  : 'Cancel Participation',     Action : 'EventManager.cancelParticipation'  },             
             {
                 $Type : 'UI.DataField',
                 Value : identifier,
-                Label  : 'ID',  
+                Label  : 'IDs',  
                 ![@UI.Importance] : #High,
             },
+            {
+                $Type : 'UI.DataField',
+                Value : name,
+                Label  : 'Name',  
+                ![@UI.Importance] : #High,
+            },            
             {
                 $Type : 'UI.DataField',
                 Value : email,
