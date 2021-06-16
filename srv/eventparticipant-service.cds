@@ -1,5 +1,6 @@
 using { sap.cae.eventmanagement as eventparticipant } from '../db/event';
-service EventParticipant @(path:'eventparticipant',impl : './eventparticipant-service.js') {
+
+service EventParticipant @(path:'eventparticipant',impl : './eventparticipant-service.js', requires:['EventParticipantRole']) {
 
     /** For displaying lists of Events */
   @readonly entity Events as projection on eventparticipant.Events
@@ -12,3 +13,10 @@ service EventParticipant @(path:'eventparticipant',impl : './eventparticipant-se
         ID                    @Core.Computed;
     };
 }
+
+// TODO
+// Participants only see events with remaining slots or they are assigned to
+// annotate EventParticipant.Events with 
+//     @restrict: [
+//         { grant: ['READ'], to: 'EventParticipantRole', where: 'availableFreeSlots > 0 or exists (participants[name = $user])' }
+//    ];

@@ -55,6 +55,9 @@
         "[production]": {
           "model": "db/hana"
         }
+      },
+      "uaa": {
+          "kind": "xsuaa"
       }
     },
     "hana": {

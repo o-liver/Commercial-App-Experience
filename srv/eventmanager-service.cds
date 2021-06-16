@@ -1,5 +1,6 @@
 using { sap.cae.eventmanagement as eventmanagement } from '../db/event';
-service EventManager @(path:'eventmanager', impl : './eventmanager-service.js') {
+
+service EventManager @(path:'eventmanager', impl : './eventmanager-service.js', requires:['EventManagerRole', 'AdminRole']) {
   @odata.draft.enabled  
   entity Events as projection on eventmanagement.Events {
     *, count( confirmedParticipants.ID ) as participantsCount : Integer  
@@ -19,6 +20,22 @@ service EventManager @(path:'eventmanager', impl : './eventmanager-service.js') 
       action confirmParticipation() returns Participants;
   };
 
-    
-
 }
+
+// Event managers can read all events, create new events and change their own events
+// Admins have no restrictions
+annotate EventManager.Events with 
+    @restrict: [
+        { grant: ['READ', 'CREATE'], to: 'EventManagerRole' },
+        { grant: ['READ', 'WRITE'], to: 'EventManagerRole', where: 'createdBy = $user' },
+        { grand: '*', to: 'AdminRole' }
+    ];
+
+// Event managers read all participants, add new participants, change participants they added themseves
+// Admins have no restrictions
+annotate EventManager.Participants with 
+    @restrict: [
+        { grant: ['READ', 'CREATE'], to: 'EventManagerRole'},
+        { grant: ['READ', 'WRITE'], to: 'EventManagerRole', where: 'createdBy = $user' },
+        { grand: '*', to: 'AdminRole' }
+   ];

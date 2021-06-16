@@ -1,0 +1,45 @@
+{
+  "xsappname": "cae-poc",
+  "tenant-mode": "dedicated",
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.EventManagerRole",
+      "description": "EventManagerRole"
+    },
+    {
+      "name": "$XSAPPNAME.AdminRole",
+      "description": "AdminRole"
+    },
+    {
+      "name": "$XSAPPNAME.EventParticipantRole",
+      "description": "EventParticipantRole"
+    }
+  ],
+  "attributes": [],
+  "role-templates": [
+    {
+      "name": "EventManagerRole",
+      "description": "generated",
+      "scope-references": [
+        "$XSAPPNAME.EventManagerRole"
+      ],
+      "attribute-references": []
+    },
+    {
+      "name": "AdminRole",
+      "description": "generated",
+      "scope-references": [
+        "$XSAPPNAME.AdminRole"
+      ],
+      "attribute-references": []
+    },
+    {
+      "name": "EventParticipantRole",
+      "description": "generated",
+      "scope-references": [
+        "$XSAPPNAME.EventParticipantRole"
+      ],
+      "attribute-references": []
+    }
+  ]
+}

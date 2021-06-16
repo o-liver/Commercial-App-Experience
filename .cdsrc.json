@@ -1,1 +1,41 @@
-{}
+{
+   "auth": {
+        "passport": {
+            "strategy": "mock",
+            "users": {
+                "Harry": {
+                    "password": "alohomora",
+                    "ID": "harry",
+                    "roles": [
+                        "EventManagerRole",
+                        "authenticated-user"
+                    ]
+                },
+               "Draco": {
+                    "password": "alohomora",
+                    "ID": "draco",
+                    "roles": [
+                        "EventManagerRole",
+                        "authenticated-user"
+                    ]
+                },
+                "Ron": {
+                    "password": "alohomora",
+                    "ID": "ron",
+                    "roles": [
+                        "EventParticipantRole",
+                        "authenticated-user"
+                    ]
+                },
+                "Hermione": {
+                    "password": "alohomora",
+                    "ID": "hermione",
+                    "roles": [
+                        "AdminRole",
+                        "authenticated-user"
+                    ]
+                }
+            }
+        }
+    }
+}
