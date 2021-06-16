@@ -6,27 +6,27 @@ annotate EventManager.Events with @(
     {        
         SelectionFields : [ identifier, date,availableFreeSlots ],
         LineItem        : [ 
-            { $Type : 'UI.DataFieldForAction', Label  : 'Publish',     Action : 'EventManager.publish'  },
-            { $Type : 'UI.DataFieldForAction', Label  : 'Block',       Action : 'EventManager.block'    },
-            { $Type : 'UI.DataFieldForAction', Label  : 'Cancel',      Action : 'EventManager.cancel'   },
-            { $Type : 'UI.DataFieldForAction', Label  : 'Complete',    Action : 'EventManager.complete' },
-            { $Type : 'UI.DataField', Label  : 'ID',                   Value : identifier               },
-            { $Type : 'UI.DataField', Label  : 'Title',                Value : title                    },
-            { $Type : 'UI.DataField', Label  : 'Description',          Value : description              },
-            { $Type : 'UI.DataField', Label  : 'Date',                 Value : date                     },
-            { $Type : 'UI.DataField', Label  : 'Available Free Slots', Value : availableFreeSlots       },
-            { $Type : 'UI.DataField', Label  : 'Status',               Value : statusCode               }
+            { $Type : 'UI.DataFieldForAction', Label  : '{i18n>publish}',     Action : 'EventManager.publish'  },
+            { $Type : 'UI.DataFieldForAction', Label  : '{i18n>block}',       Action : 'EventManager.block'    },
+            { $Type : 'UI.DataFieldForAction', Label  : '{i18n>cancel}',      Action : 'EventManager.cancel'   },
+            { $Type : 'UI.DataFieldForAction', Label  : '{i18n>complete}',    Action : 'EventManager.complete' },
+            { $Type : 'UI.DataField', Label  : '{i18n>id}',                   Value : identifier               },
+            { $Type : 'UI.DataField', Label  : '{i18n>title}',                Value : title                    },
+            { $Type : 'UI.DataField', Label  : '{i18n>description}',          Value : description              },
+            { $Type : 'UI.DataField', Label  : '{i18n>date}',                 Value : date                     },
+            { $Type : 'UI.DataField', Label  : '{i18n>availableFreeSlots}',   Value : availableFreeSlots       },
+            { $Type : 'UI.DataField', Label  : '{i18n>status}',               Value : statusCode               }
         ],
         Identification : [ 
-            { $Type : 'UI.DataFieldForAction', Label  : 'Publish',     Action : 'EventManager.publish'  },
-            { $Type : 'UI.DataFieldForAction', Label  : 'Block',       Action : 'EventManager.block'    },
-            { $Type : 'UI.DataFieldForAction', Label  : 'Cancel',      Action : 'EventManager.cancel'   },
-            { $Type : 'UI.DataFieldForAction', Label  : 'Complete',    Action : 'EventManager.complete' }
+            { $Type : 'UI.DataFieldForAction', Label  : '{i18n>publish}',     Action : 'EventManager.publish'  },
+            { $Type : 'UI.DataFieldForAction', Label  : '{i18n>block}',       Action : 'EventManager.block'    },
+            { $Type : 'UI.DataFieldForAction', Label  : '{i18n>cancel}',      Action : 'EventManager.cancel'   },
+            { $Type : 'UI.DataFieldForAction', Label  : '{i18n>complete}',    Action : 'EventManager.complete' }
          ],
         HeaderInfo         : {
             $Type          : 'UI.HeaderInfoType',
-            TypeName       : 'Event',
-            TypeNamePlural : 'Events',
+            TypeName       : '{i18n>event}',
+            TypeNamePlural : '{i18n>events}',
             Title          : { $Type : 'UI.DataField', Value : identifier  },
             Description    : { $Type : 'UI.DataField', Value : description }
         },
@@ -37,20 +37,20 @@ annotate EventManager.Events with @(
         ],
         DataPoint #Date :{ 
 
-                Title : 'Event Date',    
+                Title : '{i18n>eventDate}',    
                 Value : date,
                 ![@UI.Emphasized],
         },
         DataPoint #AvailableFreeSlots :{ 
 
-                Title : 'Available Free Slots',    
+                Title : '{i18n>availableFreeSlots}',    
                 Value : availableFreeSlots,
                 ![@UI.Emphasized],
         },
         Facets             : [
         {
             $Type  : 'UI.CollectionFacet',
-            Label  : 'Event General Data',
+            Label  : '{i18n>generalData}',
             ID     : 'GeneralData',
             Facets : [
             { 
@@ -59,7 +59,7 @@ annotate EventManager.Events with @(
         },
         {
             $Type  : 'UI.CollectionFacet',
-            Label  : 'Participants',
+            Label  : '{i18n>participants}',
             ID     : 'Participants',
             Facets : [
             { 
@@ -68,7 +68,7 @@ annotate EventManager.Events with @(
         },
         {
             $Type  : 'UI.CollectionFacet',
-            Label  : 'Administative Data',
+            Label  : '{i18n>administativeData}',
             ID     : 'AdministrativeData',
             Facets : [
             { 
@@ -78,14 +78,13 @@ annotate EventManager.Events with @(
             // Object page field groups
         FieldGroup #Values : {
             Data : [           
-            { $Type : 'UI.DataField', Value : identifier,  Label : 'ID' },
-            { $Type : 'UI.DataField', Value : title,  Label : 'Title' },
-            { $Type : 'UI.DataField', Value : description, Label : 'Description' },
-            { $Type : 'UI.DataField', Value : date, Label : 'Event Date' },
-            { $Type : 'UI.DataField', Value : maxParticipantsNumber, Label : 'Maximum Allowed Participants' },
-            { $Type : 'UI.DataField', Value : maxParticipantsNumber, Label : 'Maximum Allowed Participants' },
-            { $Type : 'UI.DataField', Value : availableFreeSlots, Label : 'Available Free Slots' }//,    
-           // { $Type : 'UI.DataField', Value : participantsFeeAmount, Label : 'Participation Fee' },          
+            { $Type : 'UI.DataField', Value : identifier,  Label : '{i18n>eventID}' },
+            { $Type : 'UI.DataField', Value : title,  Label : '{i18n>title}' },
+            { $Type : 'UI.DataField', Value : description, Label : '{i18n>description}' },
+            { $Type : 'UI.DataField', Value : date, Label : '{i18n>eventDate}' },
+            { $Type : 'UI.DataField', Value : maxParticipantsNumber, Label : '{i18n>maximumAllowedParticipants}' },
+            { $Type : 'UI.DataField', Value : availableFreeSlots, Label : '{i18n>availableFreeSlots}' },    
+            { $Type : 'UI.DataField', Value : participantsFeeAmount, Label : '{i18n>participationFee}' }      
             
             
             
@@ -93,16 +92,16 @@ annotate EventManager.Events with @(
 
         FieldGroup #AdminData : {
             Data : [           
-            { $Type : 'UI.DataField', Value : createdBy,  Label : 'Created By' },
-            { $Type : 'UI.DataField', Value : createdAt,  Label : 'Created On' },
-            { $Type : 'UI.DataField', Value : modifiedBy, Label : 'Changed By' },
-            { $Type : 'UI.DataField', Value : modifiedAt, Label : 'Changed On' }               
+            { $Type : 'UI.DataField', Value : createdBy,  Label : '{i18n>createdBy}' },
+            { $Type : 'UI.DataField', Value : createdAt,  Label : '{i18n>createdOn}' },
+            { $Type : 'UI.DataField', Value : modifiedBy, Label : '{i18n>changedBy}' },
+            { $Type : 'UI.DataField', Value : modifiedAt, Label : '{i18n>changedOn}' }               
             
             
         ]} ,
         FieldGroup #Created : {
             Data : [           
-            { $Type : 'UI.DataField', Value : createdAt,  Label : 'Created On' },
+            { $Type : 'UI.DataField', Value : createdAt,  Label : '{i18n>createdOn}' },
                    
             
         ]}
@@ -114,46 +113,46 @@ UI :
     { 
         SelectionFields : [ identifier, email,mobileNumber,statusCode ],
         LineItem : [
-            { $Type : 'UI.DataFieldForAction', Label  : 'Confirm Participation',    Action : 'EventManager.confirmParticipation' },
-            { $Type : 'UI.DataFieldForAction', Label  : 'Cancel Participation',     Action : 'EventManager.cancelParticipation'  },             
+            { $Type : 'UI.DataFieldForAction', Label  : '{i18n>confirmParticipation}',    Action : 'EventManager.confirmParticipation' },
+            { $Type : 'UI.DataFieldForAction', Label  : '{i18n>cancelParticipation}',     Action : 'EventManager.cancelParticipation'  },             
             {
                 $Type : 'UI.DataField',
                 Value : identifier,
-                Label  : 'IDs',  
+                Label  : '{i18n>participantID}',  
                 ![@UI.Importance] : #High,
             },
             {
                 $Type : 'UI.DataField',
                 Value : name,
-                Label  : 'Name',  
+                Label  : '{i18n>name}',  
                 ![@UI.Importance] : #High,
             },            
             {
                 $Type : 'UI.DataField',
                 Value : email,
-                Label  : 'Email',  
+                Label  : '{i18n>email}',  
                 ![@UI.Importance] : #High,
             },
             {
                 $Type : 'UI.DataField',
                 Value : mobileNumber,
-                Label  : 'Mobile Number',  
+                Label  : '{i18n>mobile}',  
                 ![@UI.Importance] : #High,
             },
             {
                 $Type : 'UI.DataField',
                 Value : statusCode,
-                Label  : 'Status',  
+                Label  : '{i18n>status}',  
                 ![@UI.Importance] : #High,
             }
         ],
        HeaderInfo         : 
        {
             $Type          : 'UI.HeaderInfoType',
-            TypeName       : 'Participant',
-            TypeNamePlural : 'Participants',
-            Title          : { $Type : 'UI.DataField', Value : identifier   },
-            Description    : { $Type : 'UI.DataField', Value : name         }
+            TypeName       : '{i18n>participant}',
+            TypeNamePlural : '{i18n>participants}',
+            Title          : { $Type : 'UI.DataField', Value : identifier ,  Label : '{i18n>participantID}'  },
+            Description    : { $Type : 'UI.DataField', Value : name       ,  Label : '{i18n>name}'           }
             
         },
         HeaderFacets: [
@@ -163,7 +162,7 @@ UI :
         Facets             : [
         {
             $Type  : 'UI.CollectionFacet',
-            Label  : 'Participant General Data',
+            Label  : '{i18n>generalData}',
             ID     : 'GeneralData',
             Facets : [
             { 
@@ -173,7 +172,7 @@ UI :
         
         {
             $Type  : 'UI.CollectionFacet',
-            Label  : 'Administative Data',
+            Label  : '{i18n>aministativeData}',
             ID     : 'AdministrativeData',
             Facets : [
             { 
@@ -184,27 +183,27 @@ UI :
             // Object page field groups
         FieldGroup #ParticipantDetails : {
             Data : [           
-            { $Type : 'UI.DataField', Value : identifier,       Label : 'Participant ID'    } ,
-            { $Type : 'UI.DataField', Value : name,             Label : 'Name'    } ,
-            { $Type : 'UI.DataField', Value : email,            Label : 'Email ID'          } ,
-            { $Type : 'UI.DataField', Value : mobileNumber,     Label : 'Mobile Number'     }  
+            { $Type : 'UI.DataField', Value : identifier,       Label : '{i18n>participantID}'    } ,
+            { $Type : 'UI.DataField', Value : name,             Label : '{i18n>name}'             } ,
+            { $Type : 'UI.DataField', Value : email,            Label : '{i18n>email}'            } ,
+            { $Type : 'UI.DataField', Value : mobileNumber,     Label : '{i18n>mobile}'           }  
             
             
             
         ]},
         FieldGroup #AdminData : {
             Data : [           
-            { $Type : 'UI.DataField', Value : createdBy,  Label : 'Created By' },
-            { $Type : 'UI.DataField', Value : createdAt,  Label : 'Created On' },
-            { $Type : 'UI.DataField', Value : modifiedBy, Label : 'Changed By' },
-            { $Type : 'UI.DataField', Value : modifiedAt, Label : 'Changed On' }               
+            { $Type : 'UI.DataField', Value : createdBy,  Label : '{18n>createdBy}' },
+            { $Type : 'UI.DataField', Value : createdAt,  Label : '{i18n>createdOn}' },
+            { $Type : 'UI.DataField', Value : modifiedBy, Label : '{i18n>changedBy}' },
+            { $Type : 'UI.DataField', Value : modifiedAt, Label : '{18n>changedOn}' }               
             
             
         ]} ,
         FieldGroup #Created : {
             Data : [           
-            { $Type : 'UI.DataField', Value : createdAt,  Label : 'Created On' },
-            { $Type : 'UI.DataField', Value : modifiedAt,  Label : 'Changed On' }
+            { $Type : 'UI.DataField', Value : createdAt,  Label : '{18n>createdOn}'  },
+            { $Type : 'UI.DataField', Value : modifiedAt,  Label : '{18n>changedOn}' }
                    
             
         ]}
