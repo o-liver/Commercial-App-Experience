@@ -48,13 +48,19 @@ type EventStatus : Integer enum{
   // NotReleased and Cancelled events can be deleted  ( Published , Booked , Completed , Blocked events cannot be deleted)
 }
 
-annotate Event with {
-    identifier            @Core.Label : 'Event ID';
-    title                 @Core.Label : 'Title';
-    description           @Core.Label : 'Description';
-    date                  @Core.Label : 'Event Date';
-    maxParticipantsNumber @Core.Label : 'Maximum Number of Participants';
-    availableFreeSlots    @Core.Label : 'Available Free Slots';
-    participantsFeeAmount @Core.Label : 'Pariticipation Fee';
-    statusCode            @Core.Label : 'Event Status';
-  }
+annotate Events with {
+    ID                      @Core.Computed;
+    identifier              @mandatory;
+    title                   @mandatory;
+    description             @mandatory;
+    date                    @mandatory;
+    maxParticipantsNumber   @mandatory;        
+}
+
+annotate Participants with {
+    ID              @Core.Computed;
+    identifier      @mandatory ;
+    name            @mandatory;  
+    mobileNumber    @mandatory; 
+    email           @mandatory; 
+}
