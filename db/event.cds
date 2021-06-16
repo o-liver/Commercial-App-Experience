@@ -49,13 +49,20 @@ type EventStatus : Integer enum{
 }
 
 annotate Events with {
-    ID   @Core.Computed;
-    
+    ID                      @Core.Computed;
+    identifier              @mandatory;
+    title                   @mandatory;
+    description             @mandatory;
+    date                    @mandatory;
+    maxParticipantsNumber   @mandatory;        
 }
 
 annotate Participants with {
-    ID   @Core.Computed;
-    
+    ID              @Core.Computed;
+    identifier      @mandatory ;
+    name            @mandatory;  
+    mobileNumber    @mandatory; 
+    email           @mandatory; 
 }
 
 

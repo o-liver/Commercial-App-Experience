@@ -348,7 +348,8 @@ module.exports = cds.service.impl(srv => {
         try {
 
             const id = (req.params.pop()).ID;
-            const isActiveEntity = (req.params.pop()).IsActiveEntity;
+            const eventID = (req.params.pop()).ID;
+            //const isActiveEntity = (req.params.pop()).IsActiveEntity;
 
             let participantData = await SELECT.from("sap.cae.eventmanagement.Participants").where({ ID: id });
 
@@ -356,13 +357,32 @@ module.exports = cds.service.impl(srv => {
  
             // return error on execution of action on draft instance
             if (participantData.length === 1){
-                //update cancellation status of participant 
-                participantsRes = await 
-                UPDATE("sap.cae.eventmanagement.Participants").set({statusCode : 3 }).where({ ID: id });
+                // cancel if the pariticpation is not already cancelled
+                if (participantData[0].statusCode !== 3){
+                        // increase the available slots by 1
+                            const events = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: eventID });
+                            
+                            const availableFreeSlots = events[0].availableFreeSlots + 1;
 
-                participantData = await SELECT.from("sap.cae.eventmanagement.Participants").where({ ID: id });
-                          
-            
+                            if (events[0].statusCode === 2){
+                                // update the available slots of the event  and incase the current status of event is booked , then change it to published
+                                const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({ availableFreeSlots: availableFreeSlots , statusCode: 1})
+                                                                    .where({ ID: eventID });
+                            }else{
+                                // update the available slots of the event 
+                                const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({ availableFreeSlots: availableFreeSlots})
+                                                                    .where({ ID: eventID });
+                            }
+
+                        //update cancellation status of participant 
+                        participantsRes = await 
+                        UPDATE("sap.cae.eventmanagement.Participants").set({statusCode : 3 }).where({ ID: id });
+
+                        participantData = await SELECT.from("sap.cae.eventmanagement.Participants").where({ ID: id });
+                                
+                 }else{
+                        req.error("Participation is already cancelled");
+                    }   
 
                 if (participantsRes !== 1) {
                     req.error("Participation of Participant with ID : '"+participantData[0].identifier+"' cancellation failed , try after some time ");
@@ -403,28 +423,37 @@ module.exports = cds.service.impl(srv => {
             // return error on execution of action on draft instance
             if (participantData.length === 1){
 
-                // reduce the available slots by 1
-                const events = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: eventID });
-                const availableFreeSlots = events[0].availableFreeSlots - 1;
+                    // reduce the available slots by 1
+                    const events = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: eventID });
 
-                // update the available slots and status of event ( if the available slots is zero then set the event status to blocked)
-                const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({ availableFreeSlots: availableFreeSlots , 
-                                                           statusCode: (availableFreeSlots === 0 ? 2 : events[0].statusCode)})
-                                                    .where({ ID: eventID });
+                    // confirm participation if not already confirmed
+                    if(participantData[0].statusCode !== 2){
+                        if (events[0].availableFreeSlots !== 0){
+                            const availableFreeSlots = events[0].availableFreeSlots - 1;
 
-                //update cancellation status of participant 
-                participantsRes = await 
-                UPDATE("sap.cae.eventmanagement.Participants").set({statusCode : 2 }).where({ ID: id });
+                            // update the available slots and status of event ( if the available slots is zero then set the event status to blocked)
+                            const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({ availableFreeSlots: availableFreeSlots , 
+                                                                    statusCode: (availableFreeSlots === 0 ? 2 : events[0].statusCode)})
+                                                                .where({ ID: eventID });
 
-                participantData = await SELECT.from("sap.cae.eventmanagement.Participants").where({ ID: id });
-                          
-            
+                            //update cancellation status of participant 
+                            participantsRes = await 
+                            UPDATE("sap.cae.eventmanagement.Participants").set({statusCode : 2 }).where({ ID: id });
 
-                if (participantsRes !== 1) {
-                    req.error("Participation of Participant with ID : '"+participantData[0].identifier+"' confirmation failed , try after some time ");
-                }else{
-                    req.info("Participation of Participant with ID : '"+participantData[0].identifier+"' confirmed successfully");
-                }
+                            participantData = await SELECT.from("sap.cae.eventmanagement.Participants").where({ ID: id });
+                                    
+                        }else{
+                            req.error("Cannot execute the action 'Confirm Participation' , Event is fully booked (no available free slots, try after increasing the maximum slots)");                         
+                        }
+                    }else{
+                        req.error("Participation is already confirmed");
+                    }
+
+                    if (participantsRes !== 1) {
+                        req.error("Participation of Participant with ID : '"+participantData[0].identifier+"' confirmation failed , try after some time ");
+                    }else{
+                        req.info("Participation of Participant with ID : '"+participantData[0].identifier+"' confirmed successfully");
+                    }
                 
 
                 //await tx.commit();
@@ -445,28 +474,33 @@ module.exports = cds.service.impl(srv => {
      
     srv.before("PATCH", "Participants", async req => {
         try {
-            
             const participantID = req.data.ID;
-            if( req.data.email !== 'undefined' && req.data.email ) {
-                // Check the validity of email after update of participant
-                if ( validateEmail(req.data.email ) === false ) {
-                    // invalid email
-                    req.error("Invalid Email ID: "+req.data.email, +"please enter valid email ");  
-                }else{
-                    //update cancellation status of event 
-                    const updateEvent = await UPDATE("sap.cae.eventmanagement.Participants").set({email: req.data.email}).where({ ID: participantID });
+            //let participantData = await SELECT.from("sap.cae.eventmanagement.Participants").where({ ID: participantID });
+            //if (participantData[0].statusCode !== 2 ||){
+            //    const participantID = req.data.ID;
+                if( req.data.email !== 'undefined' && req.data.email ) {
+                    // Check the validity of email after update of participant
+                    if ( validateEmail(req.data.email ) === false ) {
+                        // invalid email
+                        req.error("Invalid Email ID: "+req.data.email, +" of participant ,please enter valid email ");  
+                    }else{
+                        //update cancellation status of event 
+                        const updateEvent = await UPDATE("sap.cae.eventmanagement.Participants").set({email: req.data.email}).where({ ID: participantID });
+                    }
                 }
-            }
-             if( req.data.mobileNumber !== 'undefined' && req.data.mobileNumber ) {
-                // Check the validity of Phone after update of participant
-                if ( validatePhone(req.data.mobileNumber ) === false ) {
-                    // invalid phone
-                    req.error("Invalid Mobile number: "+req.data.mobileNumber, +"please enter valid mobile number ");  
-                }else{
-                    //update phone
-                    const updateEvent = await UPDATE("sap.cae.eventmanagement.Participants").set({email: req.data.mobileNumber}).where({ ID: participantID });
+                if( req.data.mobileNumber !== 'undefined' && req.data.mobileNumber ) {
+                    // Check the validity of Phone after update of participant
+                    if ( validatePhone(req.data.mobileNumber ) === false ) {
+                        // invalid phone
+                        req.error("Invalid Mobile number: "+req.data.mobileNumber, +" of participant  ,please enter valid mobile number ");  
+                    }else{
+                        //update phone
+                        const updateEvent = await UPDATE("sap.cae.eventmanagement.Participants").set({email: req.data.mobileNumber}).where({ ID: participantID });
+                    }
                 }
-             }
+            //}else{
+            //    req.error("Cannot change details of confirmed participants (try after cancelling the participation)");  
+            //}
         } catch (error) {
             //req.error(error);
         }
