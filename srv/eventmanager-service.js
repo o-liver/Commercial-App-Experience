@@ -39,8 +39,6 @@ module.exports = cds.service.impl(srv => {
   // reject creation of participants in case there are no available slots
    srv.before("CREATE", "Participants", async req => {
         try {
-           const { EventManager } = cds.services;
-            const { Events , Participants } = cds.entities("sap.cae.eventmanagement");
 
             // Check the validity of email before creation of participant
             if( req.data.email !== 'undefined' && req.data.email ) {
@@ -58,9 +56,10 @@ module.exports = cds.service.impl(srv => {
             }
 
             // Check the status of the event status before adding participant 
-            let eventIDs = [];
-            eventIDs.push(req.data.parent_ID); 
-            const events = await EventManager.read(Events).where("ID in", eventIDs);   
+            const eventID = req.data.parent_ID;
+
+            const events = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: eventID });
+   
             if ( events[0].statusCode === 2)
             {
               req.error("Cannot Add Participants : Event is fully booked , try after some time :-) ");  
@@ -90,10 +89,7 @@ module.exports = cds.service.impl(srv => {
    srv.after("UPDATE", "Participants", async req => {
         try {
                       
-            const { EventManager } = cds.services;
-            const { Participants } = cds.entities("sap.cae.eventmanagement");
-            let eventIDs = [];
-            eventIDs.push(req.ID);
+            const participantID = req.ID;
             if( req.email !== 'undefined' && req.email ) {
                 // Check the validity of email after update of participant
                 if ( validateEmail(req.email ) === false ) {
@@ -101,7 +97,7 @@ module.exports = cds.service.impl(srv => {
                     req.error("Invalid Email ID: "+req.email, +"please enter valid email ");  
                 }else{
                     //update cancellation status of event 
-                    const updateEvent = await UPDATE(Participants).set({email: req.email}).where("ID in", eventIDs);
+                    const updateEvent = await UPDATE("sap.cae.eventmanagement.Participants").set({email: req.email}).where({ ID: participantID });
                 }
             }
              if( req.mobileNumber !== 'undefined' && req.mobileNumber ) {
@@ -111,7 +107,7 @@ module.exports = cds.service.impl(srv => {
                     req.error("Invalid Email ID: "+req.email, +"please enter valid email ");  
                 }else{
                     //update phone
-                    const updateEvent = await UPDATE(Participants).set({email: req.phone}).where("ID in", eventIDs);
+                    const updateEvent = await UPDATE("sap.cae.eventmanagement.Participants").set({email: req.phone}).where({ ID: participantID });
                 }
              }
         } catch (error) {
@@ -122,18 +118,15 @@ module.exports = cds.service.impl(srv => {
           // set the available slots acordingly and set the blocked status ( incase its the last available slot )
        srv.after("CREATE", "Participants", async req => {
         try {
-            const { EventManager } = cds.services;
-            const { Events , Participants } = cds.entities("sap.cae.eventmanagement");
-            let eventIDs = [];
-            eventIDs.push(req.parent_ID);
-            let participantIDs = [];
-            participantIDs.push(req.ID);
-            const events = await EventManager.read(Events).where("ID in", eventIDs);
-            const updateParticipant = await UPDATE(Participants).set({statusCode: 2 }).where("ID in", participantIDs);
+
+            const eventID = req.parent_ID;
+            const participantID = req.ID;
+            const events = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: eventID });
+            const updateParticipant = await UPDATE("sap.cae.eventmanagement.Participants").set({statusCode: 2 }).where({ ID: participantID });
             const availableFreeSlots = events[0].availableFreeSlots - 1;
-            const updateEvent = await UPDATE(Events).set({ availableFreeSlots: availableFreeSlots , 
+            const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({ availableFreeSlots: availableFreeSlots , 
                                                            statusCode: (availableFreeSlots === 0 ? 2 : events[0].statusCode)})
-                                                    .where("ID in", eventIDs);
+                                                    .where({ ID: eventID });
         } catch (error) {
             req.error(error);
         }
@@ -143,18 +136,16 @@ module.exports = cds.service.impl(srv => {
    srv.after("UPDATE", "Events", async req => {
         try {
                       
-            const { EventManager } = cds.services;
-            const { Events } = cds.entities("sap.cae.eventmanagement");
-            let eventIDs = [];
-            eventIDs.push(req.ID);
-            const events = await EventManager.read(Events).where("ID in", eventIDs);
+            const id = req.ID;
+           
+            const events = await SELECT.from("sap.cae.eventmanagement.Events").columns("availableFreeSlots").where({ ID: id });
             
                 if ( events[0].availableFreeSlots != undefined){
                         if ( events[0].availableFreeSlots <= 0)
                         {
                            
                             //update cancellation status of event 
-                           const updateEvent = await UPDATE(Events).set({statusCode: 2}).where("ID in", eventIDs);
+                           const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({statusCode: 2}).where({ ID: id });
 
                         }
                 }    
@@ -168,48 +159,57 @@ module.exports = cds.service.impl(srv => {
 
         /* dont allow completed events to be deleted */
     srv.on("DELETE", "Events", async (req, next) => {
-         const { Events } = srv.entities;
-         const tx = srv.transaction(req);
-         const result = await tx.read(Events).columns("statusCode").where({ ID: req.data.ID });
+
+         const result = await SELECT.from("sap.cae.eventmanagement.Events").columns("statusCode").where({ ID: req.data.ID });
         //TODO: check the correct status codes (lifeCycle at Operation level?)
         if (result[0].statusCode === 1 || result[0].statusCode === 2 || result[0].statusCode === 3 || result[0].statusCode === 4) {
             //TODO: how to send localized error messages?
-            req.reject(409, "Deletion is rejected : Cannot delete completed Events");
+            req.reject(409, "Deletion is rejected : Cannot delete Events which are Published / Blocked / Completed (try cancelling and deleting an event)");
             return req;
         } else {
-            //Call default implementation for 'on'
+            // send info message
+            req.info("Event "+result.identifier+" Deleted successfully");
             return await next();
+           
         }
     });
 
     srv.on("cancel", async req => {
         try {
-            const { Events } = srv.entities;
-            const tx = cds.transaction(req);
-            const events = await tx.run(SELECT.from(Events).where({ ID: req.params[0] }));
-           
-            let eventIDs = [];
-            events.forEach(event => {
+            const id = (req.params.pop()).ID;
+            const events = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: id });
+            // if saved / active instance exist then allow action 
+            if (events.length === 1){
+                let eventIdentifier ;
+
+                events.forEach(event => {
+                    eventIdentifier = event.identifier;
+                    if (event.statusCode === 3){
+                        req.error("Action not successfull : Completed event "+eventIdentifier +" cannot be cancelled");
+                    }
+                });
+
+                //update cancellation status of event 
+                let eventsRes = await
+                UPDATE("sap.cae.eventmanagement.Events").set({statusCode : 5 }).where({ ID: id });
                 
-                if (event.statusCode === 3){
-                    req.error("Action not successfull : Completed event "+event.identifier +" cannot be cancelled");
+                // get the updated event record to be returned from this method ( for refresh of UI with updated data)
+                let data = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: id });
+
+
+                if (eventsRes === 1) {
+                    req.info("Event "+eventIdentifier +" Cancelled successfully");
                 }else{
-                    eventIDs.push(event.ID);
+                    req.error("Event "+eventIdentifier +" Cancel action failed , try after some time");
                 }
-            });
-
-            //update cancellation status of event 
-            let eventsRes = await tx.run(
-            UPDATE(Events).set({statusCode : 5 }).where("ID in", eventIDs));
-            let data = await tx.read(Events).where("ID in", eventIDs);
-
-
-            if (eventsRes != eventIDs.length) {
-                req.error("Action not successfull");
-            }else{
-                 req.info("Event Cancelled successfully");
+            
+                return data;
             }
-            return data;
+            // incase event is not saved / not active then throw error
+            else{
+                req.error("Save the Event and try the action again");
+            }
+
       
         } catch (error) {
             req.error(error);
@@ -219,37 +219,296 @@ module.exports = cds.service.impl(srv => {
 
      srv.on("complete", async req => {
         try {
-            const { Events } = srv.entities;
-            const tx = cds.transaction(req);
-            const events = await tx.run(SELECT.from(Events).where({ ID: req.params[0] }));
-           
-            let eventIDs = [];
-            events.forEach(event => {
-                            
-                    eventIDs.push(event.ID);
-              
-            });
+            const id = (req.params.pop()).ID;
+            const events = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: id });
+            // if saved / active instance exist then allow action 
+            if (events.length === 1){
+                let eventIdentifier ;
 
-            //update cancellation status of event 
-            let eventsRes = await tx.run(
-            UPDATE(Events).set({statusCode : 3 }).where("ID in", eventIDs));
+                events.forEach(event => {
+                    eventIdentifier = event.identifier;
+                    if (event.statusCode === 3){
+                        req.error("Action not successfull : Completed event "+eventIdentifier +" cannot be completed");
+                    }
+                });
+
+                //update complete status of event 
+                let eventsRes = await
+                UPDATE("sap.cae.eventmanagement.Events").set({statusCode : 3 }).where({ ID: id });
+                
+                // get the updated event record to be returned from this method ( for refresh of UI with updated data)
+                let data = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: id });
+
+
+                if (eventsRes === 1) {
+                    req.info("Event "+eventIdentifier +" Completed successfully");
+                }else{
+                    req.error("Event "+eventIdentifier +" Complete action failed , try after some time");
+                }
             
-            let data = await tx.read(Events).where("ID in", eventIDs);
-
-
-            if (eventsRes != eventIDs.length) {
-                req.error("Complete Action not successfull");
-            }else{
-                 req.info("Event Completed successfully");
+                return data;
             }
-            return data;
+            // incase event is not saved / not active then throw error
+            else{
+                req.error("Save the Event and try the action again");
+            }
+      
         } catch (error) {
             req.error(error);
         }
 
      });
 
-     srv.on("block", async req => {  
+     srv.on("block", async req => {
+        try {
+            const id = (req.params.pop()).ID;
+            const events = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: id });
+            // if saved / active instance exist then allow action 
+            if (events.length === 1){
+                let eventIdentifier ;
+
+                events.forEach(event => {
+                    eventIdentifier = event.identifier;
+                    if (event.statusCode === 3){
+                        req.error("Action not successfull : Completed event "+eventIdentifier +" cannot be blocked");
+                    }
+                });
+
+                //update block status of event 
+                let eventsRes = await
+                UPDATE("sap.cae.eventmanagement.Events").set({statusCode : 4 }).where({ ID: id });
+                
+                // get the updated event record to be returned from this method ( for refresh of UI with updated data)
+                let data = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: id });
+
+
+                if (eventsRes === 1) {
+                    req.info("Event "+eventIdentifier +" Blocked successfully");
+                }else{
+                    req.error("Event "+eventIdentifier +" Block action failed , try after some time");
+                }
+            
+                return data;
+            }
+            // incase event is not saved / not active then throw error
+            else{
+                req.error("Save the Event and try the action again");
+            }
+      
+        } catch (error) {
+            req.error(error);
+        }
+
+     });
+
+     srv.on("publish", async req => {
+        try {
+            const id = (req.params.pop()).ID;
+            const events = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: id });
+            
+            // if saved / active instance exist then allow action 
+            if (events.length === 1){
+                let eventIdentifier ;
+
+                events.forEach(event => {
+                    eventIdentifier = event.identifier;
+                    if (event.statusCode === 3){
+                        req.error("Action not successfull : Completed event "+eventIdentifier +" cannot be published");
+                    }
+                });
+
+                //update publish status of event 
+                let eventsRes = await
+                UPDATE("sap.cae.eventmanagement.Events").set({statusCode : 1 }).where({ ID: id });
+                
+                // get the updated event record to be returned from this method ( for refresh of UI with updated data)
+                let data = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: id });
+
+
+                if (eventsRes === 1) {
+                    req.info("Event '"+eventIdentifier +"' Published successfully");
+                }else{
+                    req.error("Event '"+eventIdentifier +"' Publish action failed , try after some time");
+                }
+            
+                return data;
+            }
+            // incase event is not saved / not active then throw error
+            else{
+                req.error("Save the Event and try the action again");
+            }
+      
+        } catch (error) {
+            req.error(error);
+        }
+
+     });
+
+     srv.on("cancelParticipation", async req => {
+        try {
+
+            const id = (req.params.pop()).ID;
+            const eventID = (req.params.pop()).ID;
+            //const isActiveEntity = (req.params.pop()).IsActiveEntity;
+
+            let participantData = await SELECT.from("sap.cae.eventmanagement.Participants").where({ ID: id });
+
+            let participantsRes;            
+ 
+            // return error on execution of action on draft instance
+            if (participantData.length === 1){
+                // cancel if the pariticpation is not already cancelled
+                if (participantData[0].statusCode !== 3){
+                        // increase the available slots by 1
+                            const events = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: eventID });
+                            
+                            const availableFreeSlots = events[0].availableFreeSlots + 1;
+
+                            if (events[0].statusCode === 2){
+                                // update the available slots of the event  and incase the current status of event is booked , then change it to published
+                                const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({ availableFreeSlots: availableFreeSlots , statusCode: 1})
+                                                                    .where({ ID: eventID });
+                            }else{
+                                // update the available slots of the event 
+                                const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({ availableFreeSlots: availableFreeSlots})
+                                                                    .where({ ID: eventID });
+                            }
+
+                        //update cancellation status of participant 
+                        participantsRes = await 
+                        UPDATE("sap.cae.eventmanagement.Participants").set({statusCode : 3 }).where({ ID: id });
+
+                        participantData = await SELECT.from("sap.cae.eventmanagement.Participants").where({ ID: id });
+                                
+                 }else{
+                        req.error("Participation is already cancelled");
+                    }   
+
+                if (participantsRes !== 1) {
+                    req.error("Participation of Participant with ID : '"+participantData[0].identifier+"' cancellation failed , try after some time ");
+                }else{
+                    req.info("Participation of Participant with ID : '"+participantData[0].identifier+"' cancelled successfully");
+                }
+                
+
+                //await tx.commit();
+                return participantData;
+            }
+            else{
+                req.error("Cannot execute the action 'Cancel Participation' on Draft instance of Event (Save the Event and try again)"); 
+            }
+      
+        } catch (error) {
+            req.error(error);
+        }
+
+     });    
+     
+     srv.on("confirmParticipation", async req => {
+        try {
+
+            const id = (req.params.pop()).ID;
+            const eventID = (req.params.pop()).ID;
+            //const isActiveEntity = (req.params.pop()).IsActiveEntity;
+
+            let participantData = await SELECT.from("sap.cae.eventmanagement.Participants").where({ ID: id });
+            
+            // Check if the action is called for inactive (draft) instance / active (saved) instnace 
+            //const { Participants } = srv.entities;
+            //const tx = srv.transaction(req);//cds.db.transaction(req);
+            //let participantData = await tx.read(Participants).where({ ID: id , IsActiveEntity: false  });
+
+            let participantsRes;            
+ 
+            // return error on execution of action on draft instance
+            if (participantData.length === 1){
+
+                    // reduce the available slots by 1
+                    const events = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: eventID });
+
+                    // confirm participation if not already confirmed
+                    if(participantData[0].statusCode !== 2){
+                        if (events[0].availableFreeSlots !== 0){
+                            const availableFreeSlots = events[0].availableFreeSlots - 1;
+
+                            // update the available slots and status of event ( if the available slots is zero then set the event status to blocked)
+                            const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({ availableFreeSlots: availableFreeSlots , 
+                                                                    statusCode: (availableFreeSlots === 0 ? 2 : events[0].statusCode)})
+                                                                .where({ ID: eventID });
+
+                            //update cancellation status of participant 
+                            participantsRes = await 
+                            UPDATE("sap.cae.eventmanagement.Participants").set({statusCode : 2 }).where({ ID: id });
+
+                            participantData = await SELECT.from("sap.cae.eventmanagement.Participants").where({ ID: id });
+                                    
+                        }else{
+                            req.error("Cannot execute the action 'Confirm Participation' , Event is fully booked (no available free slots, try after increasing the maximum slots)");                         
+                        }
+                    }else{
+                        req.error("Participation is already confirmed");
+                    }
+
+                    if (participantsRes !== 1) {
+                        req.error("Participation of Participant with ID : '"+participantData[0].identifier+"' confirmation failed , try after some time ");
+                    }else{
+                        req.info("Participation of Participant with ID : '"+participantData[0].identifier+"' confirmed successfully");
+                    }
+                
+
+                //await tx.commit();
+                return participantData;
+            }
+            else{
+                req.error("Cannot execute the action 'Confirm Participation' on Draft instance of Event (Save the Event and try again)"); 
+            }
+      
+        } catch (error) {
+            req.error(error);
+        }
+
+        
+
+     });   
+
+     
+    srv.before("PATCH", "Participants", async req => {
+        try {
+            const participantID = req.data.ID;
+            //let participantData = await SELECT.from("sap.cae.eventmanagement.Participants").where({ ID: participantID });
+            //if (participantData[0].statusCode !== 2 ||){
+            //    const participantID = req.data.ID;
+                if( req.data.email !== 'undefined' && req.data.email ) {
+                    // Check the validity of email after update of participant
+                    if ( validateEmail(req.data.email ) === false ) {
+                        // invalid email
+                        req.error("Invalid Email ID: "+req.data.email, +" of participant ,please enter valid email ");  
+                    }else{
+                        //update cancellation status of event 
+                        const updateEvent = await UPDATE("sap.cae.eventmanagement.Participants").set({email: req.data.email}).where({ ID: participantID });
+                    }
+                }
+                if( req.data.mobileNumber !== 'undefined' && req.data.mobileNumber ) {
+                    // Check the validity of Phone after update of participant
+                    if ( validatePhone(req.data.mobileNumber ) === false ) {
+                        // invalid phone
+                        req.error("Invalid Mobile number: "+req.data.mobileNumber, +" of participant  ,please enter valid mobile number ");  
+                    }else{
+                        //update phone
+                        const updateEvent = await UPDATE("sap.cae.eventmanagement.Participants").set({email: req.data.mobileNumber}).where({ ID: participantID });
+                    }
+                }
+            //}else{
+            //    req.error("Cannot change details of confirmed participants (try after cancelling the participation)");  
+            //}
+        } catch (error) {
+            //req.error(error);
+        }
+    })
+     
+    
+    /*
+       srv.on("block", async req => {  
         try {
             const { Events } = srv.entities;
             const tx = cds.transaction(req);
@@ -266,13 +525,11 @@ module.exports = cds.service.impl(srv => {
                 }
         
             });
-
             //update cancellation status of event 
             let eventsRes = await tx.run(
             UPDATE(Events).set({statusCode : 4 }).where("ID in", eventIDs));
             
             let data = await tx.read(Events).where("ID in", eventIDs);
-
             if (eventsRes != eventIDs.length) {
                 req.error("Block Action not successfull");
             }else{
@@ -283,94 +540,7 @@ module.exports = cds.service.impl(srv => {
         } catch (error) {
             req.error(error);
         }
-
      });
-
-     srv.on("publish", async req => {
-        try {
-            const { Events } = srv.entities;
-            const tx = cds.transaction(req);
-            const events = await tx.run(SELECT.from(Events).where({ ID: req.params[0] }));
-           
-            let eventIDs = [];
-            events.forEach(event => {
-
-                 if (event.statusCode === 3){
-                    req.error("Action not successfull : Completed event "+event.identifier +" cannot be published");
-                }else{
-                    eventIDs.push(event.ID);
-                }
-                
-            });
-
-            //update cancellation status of event 
-            let eventsRes = await tx.run(
-            UPDATE(Events).set({statusCode : 1 }).where("ID in", eventIDs));
-            let data = await tx.read(Events).where("ID in", eventIDs);
-
-
-            if (eventsRes != eventIDs.length) {
-                req.error("Publish Action not successfull");
-            }else{
-                req.info("Event Published successfully");
-            }
-            return data;
-      
-        } catch (error) {
-            req.error(error);
-        }
-
-     });
-
-     srv.on("cancelParticipation", async req => {
-        try {
-            const { Participants } = srv.entities;
-            const tx = cds.transaction(req);
-            const participants = await tx.run(SELECT.from(Participants).where({ ID: req.params[0] }));
-           
-            let participantsIDs = [];
-            participants.forEach(participant => {
-
-                    participantsIDs.push(participant.ID);
-           
-            });
-
-            //update cancellation status of participant 
-            let participantsRes = await tx.run(
-            UPDATE(Participants).set({statusCode : 3 }).where("ID in", participantsIDs));
-
-            let data = await tx.read(Participants).where("ID in", participantsIDs);
-
-            if (participants != participantsIDs.length) {
-                req.error("Action not successfull");
-            }else{
-                 req.info("Event Participation cancelled successfully");
-            }
-            return data;
-      
-        } catch (error) {
-            req.error(error);
-        }
-
-     });     
-     
-    
-    /*
-        const { Participants } = srv.entities ('sap.cae.eventmanagement.Participants')
-        srv.after ('READ', 'Events', _reduceAvailableFreeSlots)
-        //Function to adjust the free slots in the event  
-        function _reduceAvailableFreeSlots (events,req) { 
-            const eventsByID = Array.isArray(events) 
-                ? events.reduce ((all,o) => { (all[o.ID] = o).total=0; return all },{}) 
-                : { [events.ID]: events } 
-            return cds.transaction(req) .run ( 
-                    SELECT.from(Participants) .columns ('parent_ID', 'Status') 
-                        .where ({ parent_ID: {in: Object.keys(eventsByID)} }) 
-                ) .then (participants => 
-                    participants.forEach (participant => ordersByID [participant.parent_ID] .availableFreeSlots -= 1) 
-                    ) 
-            
-        } 
     */
 
 
