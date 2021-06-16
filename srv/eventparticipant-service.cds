@@ -7,4 +7,8 @@ service EventParticipant @(path:'eventparticipant',impl : './eventparticipant-se
 
     /** Cannot delete participants ( can create and read participants list ) */
   @insertonly @readonly entity Participants as projection on eventparticipant.Participants;
+
+    annotate Event with {
+        ID                    @Core.Computed;
+    };
 }
