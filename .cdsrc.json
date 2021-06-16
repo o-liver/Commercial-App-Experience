@@ -34,7 +34,8 @@
                         "AdminRole",
                         "authenticated-user"
                     ]
-                }
+                },
+                "*": true
             }
         }
     }
