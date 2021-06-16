@@ -30,11 +30,11 @@ annotate EventManager.Events with @(
             Title          : { $Type : 'UI.DataField', Value : identifier  },
             Description    : { $Type : 'UI.DataField', Value : description }
         },
-        HeaderFacets: [
-            { $Type : 'UI.ReferenceFacet', Target : '@UI.DataPoint#Date' },
-            { $Type : 'UI.ReferenceFacet', Target : '@UI.DataPoint#AvailableFreeSlots'},   
-            { $Type : 'UI.ReferenceFacet', Target : '@UI.FieldGroup#Created'}     
-        ],
+        HeaderFacets: [
+            { $Type : 'UI.ReferenceFacet', Target : '@UI.DataPoint#Date' },
+            { $Type : 'UI.ReferenceFacet', Target : '@UI.DataPoint#AvailableFreeSlots'},   
+            { $Type : 'UI.ReferenceFacet', Target : '@UI.FieldGroup#Created'}     
+        ],
         DataPoint #Date :{ 
 
                 Title : 'Event Date',    
@@ -84,8 +84,8 @@ annotate EventManager.Events with @(
             { $Type : 'UI.DataField', Value : date, Label : 'Event Date' },
             { $Type : 'UI.DataField', Value : maxParticipantsNumber, Label : 'Maximum Allowed Participants' },
             { $Type : 'UI.DataField', Value : maxParticipantsNumber, Label : 'Maximum Allowed Participants' },
-            { $Type : 'UI.DataField', Value : availableFreeSlots, Label : 'Available Free Slots' },    
-            { $Type : 'UI.DataField', Value : participantsFeeAmount, Label : 'Participation Fee' },          
+            { $Type : 'UI.DataField', Value : availableFreeSlots, Label : 'Available Free Slots' }//,    
+           // { $Type : 'UI.DataField', Value : participantsFeeAmount, Label : 'Participation Fee' },          
             
             
             
@@ -110,14 +110,24 @@ annotate EventManager.Events with @(
 );
 
 annotate EventManager.Participants with @(
-        SelectionFields : [ identifier, email,mobileNumber ],
-        UI.LineItem : [
+UI : 
+    { 
+        SelectionFields : [ identifier, email,mobileNumber,statusCode ],
+        LineItem : [
+            { $Type : 'UI.DataFieldForAction', Label  : 'Confirm Participation',    Action : 'EventManager.confirmParticipation' },
+            { $Type : 'UI.DataFieldForAction', Label  : 'Cancel Participation',     Action : 'EventManager.cancelParticipation'  },             
             {
                 $Type : 'UI.DataField',
                 Value : identifier,
-                Label  : 'ID',  
+                Label  : 'IDs',  
                 ![@UI.Importance] : #High,
             },
+            {
+                $Type : 'UI.DataField',
+                Value : name,
+                Label  : 'Name',  
+                ![@UI.Importance] : #High,
+            },            
             {
                 $Type : 'UI.DataField',
                 Value : email,
@@ -130,40 +140,75 @@ annotate EventManager.Participants with @(
                 Label  : 'Mobile Number',  
                 ![@UI.Importance] : #High,
             },
+            {
+                $Type : 'UI.DataField',
+                Value : statusCode,
+                Label  : 'Status',  
+                ![@UI.Importance] : #High,
+            }
         ],
        HeaderInfo         : 
        {
             $Type          : 'UI.HeaderInfoType',
-            TypeName       : 'Event',
-            TypeNamePlural : 'Events',
-            Title          : { $Type : 'UI.DataField', Value : identifier  },
-            Description    : { $Type : 'UI.DataField', Value : email }
+            TypeName       : 'Participant',
+            TypeNamePlural : 'Participants',
+            Title          : { $Type : 'UI.DataField', Value : identifier   },
+            Description    : { $Type : 'UI.DataField', Value : name         }
+            
         },
-        
-       
+        HeaderFacets: [
+            { $Type : 'UI.ReferenceFacet', Target : '@UI.FieldGroup#Created'}     
+        ],
+
         Facets             : [
         {
             $Type  : 'UI.CollectionFacet',
-            Label  : 'Event General Data',
+            Label  : 'Participant General Data',
             ID     : 'GeneralData',
             Facets : [
             { 
-                $Type : 'UI.ReferenceFacet', Target : ![@UI.FieldGroup#Values], ID : 'GeneralData'
+                $Type : 'UI.ReferenceFacet', Target : ![@UI.FieldGroup#ParticipantDetails], ID : 'GeneralData'
             }],
         },
+        
+        {
+            $Type  : 'UI.CollectionFacet',
+            Label  : 'Administative Data',
+            ID     : 'AdministrativeData',
+            Facets : [
+            { 
+                $Type : 'UI.ReferenceFacet', Target : ![@UI.FieldGroup#AdminData], ID : 'AdministrativeData'
+            }],
+        }
         ],
             // Object page field groups
-        FieldGroup #Values : {
+        FieldGroup #ParticipantDetails : {
             Data : [           
-            { $Type : 'UI.DataField', Value : identifier, Label : 'Participant ID' },
-            { $Type : 'UI.DataField', Value : email,  Label : 'Email ID' },
-            { $Type : 'UI.DataField', Value : mobileNumber, Label : 'Mobile Number' }     
+            { $Type : 'UI.DataField', Value : identifier,       Label : 'Participant ID'    } ,
+            { $Type : 'UI.DataField', Value : name,             Label : 'Name'    } ,
+            { $Type : 'UI.DataField', Value : email,            Label : 'Email ID'          } ,
+            { $Type : 'UI.DataField', Value : mobileNumber,     Label : 'Mobile Number'     }  
             
             
             
         ]},
+        FieldGroup #AdminData : {
+            Data : [           
+            { $Type : 'UI.DataField', Value : createdBy,  Label : 'Created By' },
+            { $Type : 'UI.DataField', Value : createdAt,  Label : 'Created On' },
+            { $Type : 'UI.DataField', Value : modifiedBy, Label : 'Changed By' },
+            { $Type : 'UI.DataField', Value : modifiedAt, Label : 'Changed On' }               
+            
+            
+        ]} ,
+        FieldGroup #Created : {
+            Data : [           
+            { $Type : 'UI.DataField', Value : createdAt,  Label : 'Created On' },
+            { $Type : 'UI.DataField', Value : modifiedAt,  Label : 'Changed On' }
+                   
+            
+        ]}
 
-  
+    }
     
 );
-
