@@ -8,6 +8,7 @@
                     "ID": "harry",
                     "roles": [
                         "EventManagerRole",
+                        "EventParticipantRole",
                         "authenticated-user"
                     ]
                 },

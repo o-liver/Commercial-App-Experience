@@ -1,7 +1,7 @@
 ID;identifier;title;description;date;maxParticipantsNumber;availableFreeSlots;participantsFeeAmount;currency_code;statusCode;createdBy
 79ceab87-300d-4b66-8cc3-f82c679b77ab;1;SME Summit 2020;SME Innovation Summit in Palma;2020-03-01;4;2;100.00;;0;anonymous
 79ceab87-300d-4b66-8cc3-f82c679b77ac;2;SAP Teched 2021;SAP TechEd in Bangalore;2021-03-01;4;1;10.00;;0;anonymous
-79ceab87-300d-4b66-8cc3-f82c679b77ad;3;Care of Magical Creatures;On how to care for magical beasts. Classes were held outside the castle.;2021-07-01;20;5;100;EUR;0;harry
-79ceab87-300d-4b66-8cc3-f82c679b77ae;4;Divination;The art of predicting the future.;2021-08-02;20;5;100;EUR;0;harry
-79ceab87-300d-4b66-8cc3-f82c679b77af;5;Potions;The art of creating mixtures with magical effects.;2021-09-03;20;5;100;EUR;0;harry
-79ceab87-300d-4b66-8cc3-f82c679b77ag;6;DADA;Defense Against the Dark Arts.;2021-10-04;20;5;100;EUR;0;draco
+79ceab87-300d-4b66-8cc3-f82c679b77ad;3;Care of Magical Creatures;On how to care for magical beasts. Classes were held outside the castle.;2021-07-01;20;5;100;;0;harry
+79ceab87-300d-4b66-8cc3-f82c679b77ae;4;Divination;The art of predicting the future.;2021-08-02;20;5;100;;0;harry
+79ceab87-300d-4b66-8cc3-f82c679b77af;5;Potions;The art of creating mixtures with magical effects.;2021-09-03;20;5;100;;0;harry
+79ceab87-300d-4b66-8cc3-f82c679b77a1;6;DADA;Defense Against the Dark Arts.;2021-10-04;20;5;100;;0;draco

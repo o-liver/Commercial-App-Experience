@@ -27,7 +27,7 @@ service EventManager @(path:'eventmanager', impl : './eventmanager-service.js', 
 annotate EventManager.Events with 
     @restrict: [
         { grant: ['READ', 'CREATE'], to: 'EventManagerRole' },
-        { grant: ['WRITE'], to: 'EventManagerRole', where: 'createdBy = $user' },
+        { grant: ['*'], to: 'EventManagerRole', where: 'createdBy = $user' },
         { grand: '*', to: 'AdminRole' }
     ];
 
@@ -36,6 +36,6 @@ annotate EventManager.Events with
 annotate EventManager.Participants with 
     @restrict: [
         { grant: ['READ', 'CREATE'], to: 'EventManagerRole'},
-        { grant: ['WRITE'], to: 'EventManagerRole', where: 'createdBy = $user' },
+        { grant: ['*'], to: 'EventManagerRole', where: 'createdBy = $user' },
         { grand: '*', to: 'AdminRole' }
    ];
