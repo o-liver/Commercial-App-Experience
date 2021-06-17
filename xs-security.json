@@ -41,5 +41,29 @@
       ],
       "attribute-references": []
     }
+  ],
+  "role-collections": [
+      {
+        "name": "EventManagerRoleCollection",
+        "description": "Event Manager",
+        "role-template-references": [
+            "$XSAPPNAME.EventManagerRole",
+            "$XSAPPNAME.EventParticipantRole"
+        ]
+      },
+      {
+        "name": "EventParticipantRoleCollection",
+        "description": "Event Participant",
+        "role-template-references": [
+            "$XSAPPNAME.EventParticipantRole"
+        ]
+      },
+      {
+        "name": "EventAdminRoleCollection",
+        "description": "Event Management Administrator",
+        "role-template-references": [
+            "$XSAPPNAME.AdminRole"
+        ]            
+      }
   ]
 }

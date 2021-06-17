@@ -52,7 +52,6 @@ resources:
 # ------------------------------------------------------------
    type: com.sap.xs.hdi-container
    parameters:
-     path: /.xs-security.json
      service: hana  # or 'hanatrial' on trial landscapes
      service-plan: hdi-shared
    properties:
@@ -62,10 +61,9 @@ resources:
 # ------------------------------------------------------------
    type: org.cloudfoundry.managed-service
    parameters:
+     path: ./xs-security.json
      service: xsuaa
      service-plan: application  
      config:
        xsappname: cae-poc-${space}    #  name + space dependency
        tenant-mode: dedicated
-
-
