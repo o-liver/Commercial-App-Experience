@@ -3,15 +3,15 @@ namespace sap.cae.eventmanagement;
 
 /* Event header Entity */
 entity Events : managed, cuid {   
-    identifier              : String          @title : 'Event ID';
-    title                   :  String(100)    @title : 'Title';
-    description             :  String(500)    @title : 'Description';
-    date                    : DateTime        @title : 'Event Date';
-    maxParticipantsNumber   : Integer         @title : 'Maximum Number of Participants';
-    availableFreeSlots      : Integer         @title : 'Available Free Slots';
-    participantsFeeAmount   : Decimal(6,2)    @title : 'Paricipation Fee';
+    identifier              : String                     @title : 'Event ID';
+    title                   : localized String(100)      @title : 'Title';
+    description             : localized String(500)      @title : 'Description';
+    date                    : DateTime                   @title : 'Event Date';
+    maxParticipantsNumber   : Integer                    @title : 'Maximum Number of Participants';
+    availableFreeSlots      : Integer                    @title : 'Available Free Slots';
+    participantsFeeAmount   : Decimal(6,2)               @title : 'Paricipation Fee';
     currency                : Currency;
-    statusCode              : EventStatus     @title : 'Event Status';
+    statusCode              : EventStatus                @title : 'Event Status';
     participants            : Composition of many Participants on participants.parent = $self;
     confirmedParticipants   : Association to many Participants on confirmedParticipants.parent = $self and confirmedParticipants.statusCode = 'Confirmed'
      //title  : localized String(111);
