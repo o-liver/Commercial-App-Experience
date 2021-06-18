@@ -14,8 +14,7 @@ entity Events : managed, cuid {
     statusCode              : EventStatus                @title : 'Event Status';
     participants            : Composition of many Participants on participants.parent = $self;
     confirmedParticipants   : Association to many Participants on confirmedParticipants.parent = $self and confirmedParticipants.statusCode = 'Confirmed'
-     //title  : localized String(111);
-    //descr  : localized String(1111); 
+
 }
 
 /* Participants Entity */
