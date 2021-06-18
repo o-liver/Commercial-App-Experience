@@ -172,7 +172,7 @@ UI :
         
         {
             $Type  : 'UI.CollectionFacet',
-            Label  : '{i18n>aministativeData}',
+            Label  : '{i18n>administativeData}',
             ID     : 'AdministrativeData',
             Facets : [
             { 
