@@ -9,7 +9,7 @@ module.exports = cds.service.impl(srv => {
    srv.before("CREATE", "Events", async req => {
         try {
             
-            req.data.statusCode = 0;
+            req.data.statusCode_code = 0;
             req.data.availableFreeSlots = req.data.maxParticipantsNumber ;
         } catch (error) {
             req.error(error);
@@ -60,23 +60,23 @@ module.exports = cds.service.impl(srv => {
 
             const events = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: eventID });
    
-            if ( events[0].statusCode === 2)
+            if ( events[0].statusCode_code === 2)
             {
               req.error("Cannot Add Participants : Event is fully booked , try after some time :-) ");  
             }
-            if ( events[0].statusCode === 3)
+            if ( events[0].statusCode_code === 3)
             {
               req.error("Cannot Add Participants : Event is completed , better luck next time :-) ");  
             }
-            if ( events[0].statusCode === 4)
+            if ( events[0].statusCode_code === 4)
             {
               req.error("Cannot Add Participants : Event is blocked , try after publishing the event :-) ");  
             }
-            if ( events[0].statusCode === 5)
+            if ( events[0].statusCode_code === 5)
             {
               req.error("Cannot Add Participants : Event is cancelled , try after publishing the event :-) ");  
             }
-                        if ( events[0].statusCode === 0)
+                        if ( events[0].statusCode_code === 0)
             {
               req.error("Cannot Add Participants : Event is not released , try after publishing the event :-) ");  
             }
@@ -122,10 +122,10 @@ module.exports = cds.service.impl(srv => {
             const eventID = req.parent_ID;
             const participantID = req.ID;
             const events = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: eventID });
-            const updateParticipant = await UPDATE("sap.cae.eventmanagement.Participants").set({statusCode: 2 }).where({ ID: participantID });
+            const updateParticipant = await UPDATE("sap.cae.eventmanagement.Participants").set({statusCode_code: 2 }).where({ ID: participantID });
             const availableFreeSlots = events[0].availableFreeSlots - 1;
             const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({ availableFreeSlots: availableFreeSlots , 
-                                                           statusCode: (availableFreeSlots === 0 ? 2 : events[0].statusCode)})
+                                                           statusCode_code: (availableFreeSlots === 0 ? 2 : events[0].statusCode_code)})
                                                     .where({ ID: eventID });
         } catch (error) {
             req.error(error);
@@ -145,7 +145,7 @@ module.exports = cds.service.impl(srv => {
                         {
                            
                             //update cancellation status of event 
-                           const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({statusCode: 2}).where({ ID: id });
+                           const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({statusCode_code: 2}).where({ ID: id });
 
                         }
                 }    
@@ -160,9 +160,9 @@ module.exports = cds.service.impl(srv => {
         /* dont allow completed events to be deleted */
     srv.on("DELETE", "Events", async (req, next) => {
 
-         const result = await SELECT.from("sap.cae.eventmanagement.Events").columns("statusCode").where({ ID: req.data.ID });
+         const result = await SELECT.from("sap.cae.eventmanagement.Events").columns("statusCode_code").where({ ID: req.data.ID });
         //TODO: check the correct status codes (lifeCycle at Operation level?)
-        if (result[0].statusCode === 1 || result[0].statusCode === 2 || result[0].statusCode === 3 || result[0].statusCode === 4) {
+        if (result[0].statusCode_code === 1 || result[0].statusCode_code === 2 || result[0].statusCode_code === 3 || result[0].statusCode_code === 4) {
             //TODO: how to send localized error messages?
             req.reject(409, "Deletion is rejected : Cannot delete Events which are Published / Blocked / Completed (try cancelling and deleting an event)");
             return req;
@@ -184,14 +184,14 @@ module.exports = cds.service.impl(srv => {
 
                 events.forEach(event => {
                     eventIdentifier = event.identifier;
-                    if (event.statusCode === 3){
+                    if (event.statusCode_code === 3){
                         req.error("Action not successfull : Completed event "+eventIdentifier +" cannot be cancelled");
                     }
                 });
 
                 //update cancellation status of event 
                 let eventsRes = await
-                UPDATE("sap.cae.eventmanagement.Events").set({statusCode : 5 }).where({ ID: id });
+                UPDATE("sap.cae.eventmanagement.Events").set({statusCode_code : 5 }).where({ ID: id });
                 
                 // get the updated event record to be returned from this method ( for refresh of UI with updated data)
                 let data = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: id });
@@ -227,14 +227,14 @@ module.exports = cds.service.impl(srv => {
 
                 events.forEach(event => {
                     eventIdentifier = event.identifier;
-                    if (event.statusCode === 3){
+                    if (event.statusCode_code === 3){
                         req.error("Action not successfull : Completed event "+eventIdentifier +" cannot be completed");
                     }
                 });
 
                 //update complete status of event 
                 let eventsRes = await
-                UPDATE("sap.cae.eventmanagement.Events").set({statusCode : 3 }).where({ ID: id });
+                UPDATE("sap.cae.eventmanagement.Events").set({statusCode_code : 3 }).where({ ID: id });
                 
                 // get the updated event record to be returned from this method ( for refresh of UI with updated data)
                 let data = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: id });
@@ -269,14 +269,14 @@ module.exports = cds.service.impl(srv => {
 
                 events.forEach(event => {
                     eventIdentifier = event.identifier;
-                    if (event.statusCode === 3){
+                    if (event.statusCode_code === 3){
                         req.error("Action not successfull : Completed event "+eventIdentifier +" cannot be blocked");
                     }
                 });
 
                 //update block status of event 
                 let eventsRes = await
-                UPDATE("sap.cae.eventmanagement.Events").set({statusCode : 4 }).where({ ID: id });
+                UPDATE("sap.cae.eventmanagement.Events").set({statusCode_code : 4 }).where({ ID: id });
                 
                 // get the updated event record to be returned from this method ( for refresh of UI with updated data)
                 let data = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: id });
@@ -312,14 +312,14 @@ module.exports = cds.service.impl(srv => {
 
                 events.forEach(event => {
                     eventIdentifier = event.identifier;
-                    if (event.statusCode === 3){
+                    if (event.statusCode_code === 3){
                         req.error("Action not successfull : Completed event "+eventIdentifier +" cannot be published");
                     }
                 });
 
                 //update publish status of event 
                 let eventsRes = await
-                UPDATE("sap.cae.eventmanagement.Events").set({statusCode : 1 }).where({ ID: id });
+                UPDATE("sap.cae.eventmanagement.Events").set({statusCode_code : 1 }).where({ ID: id });
                 
                 // get the updated event record to be returned from this method ( for refresh of UI with updated data)
                 let data = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: id });
@@ -358,15 +358,15 @@ module.exports = cds.service.impl(srv => {
             // return error on execution of action on draft instance
             if (participantData.length === 1){
                 // cancel if the pariticpation is not already cancelled
-                if (participantData[0].statusCode !== 3){
+                if (participantData[0].statusCode_code !== 3){
                         // increase the available slots by 1
                             const events = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: eventID });
                             
                             const availableFreeSlots = events[0].availableFreeSlots + 1;
 
-                            if (events[0].statusCode === 2){
+                            if (events[0].statusCode_code === 2){
                                 // update the available slots of the event  and incase the current status of event is booked , then change it to published
-                                const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({ availableFreeSlots: availableFreeSlots , statusCode: 1})
+                                const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({ availableFreeSlots: availableFreeSlots , statusCode_code: 1})
                                                                     .where({ ID: eventID });
                             }else{
                                 // update the available slots of the event 
@@ -376,7 +376,7 @@ module.exports = cds.service.impl(srv => {
 
                         //update cancellation status of participant 
                         participantsRes = await 
-                        UPDATE("sap.cae.eventmanagement.Participants").set({statusCode : 3 }).where({ ID: id });
+                        UPDATE("sap.cae.eventmanagement.Participants").set({statusCode_code : 3 }).where({ ID: id });
 
                         participantData = await SELECT.from("sap.cae.eventmanagement.Participants").where({ ID: id });
                                 
@@ -427,18 +427,18 @@ module.exports = cds.service.impl(srv => {
                     const events = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: eventID });
 
                     // confirm participation if not already confirmed
-                    if(participantData[0].statusCode !== 2){
+                    if(participantData[0].statusCode_code !== 2){
                         if (events[0].availableFreeSlots !== 0){
                             const availableFreeSlots = events[0].availableFreeSlots - 1;
 
                             // update the available slots and status of event ( if the available slots is zero then set the event status to blocked)
                             const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({ availableFreeSlots: availableFreeSlots , 
-                                                                    statusCode: (availableFreeSlots === 0 ? 2 : events[0].statusCode)})
+                                                                    statusCode_code: (availableFreeSlots === 0 ? 2 : events[0].statusCode_code)})
                                                                 .where({ ID: eventID });
 
                             //update cancellation status of participant 
                             participantsRes = await 
-                            UPDATE("sap.cae.eventmanagement.Participants").set({statusCode : 2 }).where({ ID: id });
+                            UPDATE("sap.cae.eventmanagement.Participants").set({statusCode_code : 2 }).where({ ID: id });
 
                             participantData = await SELECT.from("sap.cae.eventmanagement.Participants").where({ ID: id });
                                     

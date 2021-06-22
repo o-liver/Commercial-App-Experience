@@ -4,7 +4,7 @@ using EventManager as service from 'cae-poc../../../home/user/projects/Commercia
 annotate EventManager.Events with @(
     UI : 
     {        
-        SelectionFields : [ identifier, date,availableFreeSlots ],
+        SelectionFields : [ identifier, date,availableFreeSlots,statusCode_code  ],
         LineItem        : [ 
             { $Type : 'UI.DataFieldForAction', Label  : '{i18n>publish}',     Action : 'EventManager.publish'  },
             { $Type : 'UI.DataFieldForAction', Label  : '{i18n>block}',       Action : 'EventManager.block'    },
@@ -15,7 +15,11 @@ annotate EventManager.Events with @(
             { $Type : 'UI.DataField', Label  : '{i18n>description}',          Value : description              },
             { $Type : 'UI.DataField', Label  : '{i18n>date}',                 Value : date                     },
             { $Type : 'UI.DataField', Label  : '{i18n>availableFreeSlots}',   Value : availableFreeSlots       },
-            { $Type : 'UI.DataField', Label  : '{i18n>status}',               Value : statusCode               }
+            { $Type : 'UI.DataField', Label  : '{i18n>status}',               Value : statusCode.descr         },
+            {         
+                Value : statusCode.code,
+                @UI.Hidden : true
+            }
         ],
         Identification : [ 
             { $Type : 'UI.DataFieldForAction', Label  : '{i18n>publish}',     Action : 'EventManager.publish'  },
@@ -111,7 +115,7 @@ annotate EventManager.Events with @(
 annotate EventManager.Participants with @(
 UI : 
     { 
-        SelectionFields : [ identifier, email,mobileNumber,statusCode ],
+        SelectionFields : [ identifier, email,mobileNumber,statusCode_code ],
         LineItem : [
             { $Type : 'UI.DataFieldForAction', Label  : '{i18n>confirmParticipation}',    Action : 'EventManager.confirmParticipation' },
             { $Type : 'UI.DataFieldForAction', Label  : '{i18n>cancelParticipation}',     Action : 'EventManager.cancelParticipation'  },             
@@ -141,9 +145,13 @@ UI :
             },
             {
                 $Type : 'UI.DataField',
-                Value : statusCode,
+                Value : statusCode.descr,
                 Label  : '{i18n>status}',  
                 ![@UI.Importance] : #High,
+            },
+            {               
+                Value : statusCode.code,
+                @UI.Hidden : true
             }
         ],
        HeaderInfo         : 
