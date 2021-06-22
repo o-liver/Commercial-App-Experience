@@ -3,7 +3,7 @@ using { sap.cae.eventmanagement as eventmanagement } from '../db/event';
 service EventManager @(path:'eventmanager', impl : './eventmanager-service.js', requires:['EventManagerRole', 'AdminRole']) {
   @odata.draft.enabled  
   entity Events as projection on eventmanagement.Events {
-    *, count( confirmedParticipants.ID ) as participantsCount : Integer  
+    *//, count( confirmedParticipants.ID ) as participantsCount : Integer  
   } 
     group by ID  // to make sure to pi
     actions{

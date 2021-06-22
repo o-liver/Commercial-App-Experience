@@ -1,4 +1,5 @@
 using { managed, cuid ,Currency } from '@sap/cds/common';
+using sap from '@sap/cds/common';
 namespace sap.cae.eventmanagement;
 
 /* Event header Entity */
@@ -11,9 +12,10 @@ entity Events : managed, cuid {
     availableFreeSlots      : Integer                    @title : 'Available Free Slots';
     participantsFeeAmount   : Decimal(6,2)               @title : 'Paricipation Fee';
     currency                : Currency;
-    statusCode              : EventStatus                @title : 'Event Status';
+    statusCode              : Association to one EventStatusCode @title : 'Event Status';
     participants            : Composition of many Participants on participants.parent = $self;
-    confirmedParticipants   : Association to many Participants on confirmedParticipants.parent = $self and confirmedParticipants.statusCode = 'Confirmed'
+    //confirmedParticipants   : Association to many Participants on confirmedParticipants.parent = $self and confirmedParticipants.statusCode
+
 }
 
 /* Participants Entity */
@@ -23,14 +25,22 @@ entity Participants : managed, cuid {
     name            : String ;
     email           : String;
     mobileNumber    : String;
-    statusCode      : Status;
+    statusCode      : Association to one ParticipantStatusCode;
 }
 
 /* Code List Data Type with Fixed values */
-type Status : Integer enum{
+type ParticipantStatus : Integer enum{
   InProcess = 1;
   Confirmed = 2;
   Cancelled = 3;
+}
+
+entity ParticipantStatusCode : sap.common.CodeList {
+        @Common.Text : {
+            $value                 : descr,
+            ![@UI.TextArrangement] : #TextOnly
+        }
+    key code : Integer @(title : '{i18n>ParticipantStatusCode}') default 1
 }
 
 type EventStatus : Integer enum{
@@ -44,6 +54,13 @@ type EventStatus : Integer enum{
   // SAM => 0 -> 1 -> 2 -> 3  , 0 -> 1 -> 3 , 0 -> 1 -> 4 -> 1 ... ,  
   // Completed events cannot be cancelled / blocked / published 
   // NotReleased and Cancelled events can be deleted  ( Published , Booked , Completed , Blocked events cannot be deleted)
+}
+entity EventStatusCode : sap.common.CodeList {
+        @Common.Text : {
+            $value                 : descr,
+            ![@UI.TextArrangement] : #TextOnly
+        }
+    key code : Integer @(title : '{i18n>EventStatusCode}') default 0
 }
 
 annotate Events with {
