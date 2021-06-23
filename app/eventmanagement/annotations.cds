@@ -15,7 +15,7 @@ annotate EventManager.Events with @(
             { $Type : 'UI.DataField', Label  : '{i18n>description}',          Value : description              },
             { $Type : 'UI.DataField', Label  : '{i18n>date}',                 Value : date                     },
             { $Type : 'UI.DataField', Label  : '{i18n>availableFreeSlots}',   Value : availableFreeSlots       },
-            { $Type : 'UI.DataField', Label  : '{i18n>status}',               Value : statusCode.descr         },
+            { $Type : 'UI.DataField', Label  : '{i18n>status}',               Value : statusCode.descr , Criticality : eventStatusCriticality        },
             {         
                 Value : statusCode.code,
                 @UI.Hidden : true
@@ -37,6 +37,7 @@ annotate EventManager.Events with @(
         HeaderFacets: [
             { $Type : 'UI.ReferenceFacet', Target : '@UI.DataPoint#Date' },
             { $Type : 'UI.ReferenceFacet', Target : '@UI.DataPoint#AvailableFreeSlots'},   
+            { $Type : 'UI.ReferenceFacet', Target : '@UI.DataPoint#EventStatus'},   
             { $Type : 'UI.ReferenceFacet', Target : '@UI.FieldGroup#Created'}     
         ],
         DataPoint #Date :{ 
@@ -49,6 +50,13 @@ annotate EventManager.Events with @(
 
                 Title : '{i18n>availableFreeSlots}',    
                 Value : availableFreeSlots,
+                ![@UI.Emphasized],
+        },
+        DataPoint #EventStatus :{ 
+
+                Title : '{i18n>status}',    
+                Value : statusCode.descr,
+                Criticality : eventStatusCriticality  ,
                 ![@UI.Emphasized],
         },
         Facets             : [
@@ -104,9 +112,10 @@ annotate EventManager.Events with @(
             
         ]} ,
         FieldGroup #Created : {
-            Data : [           
+            Data : [ 
+            { $Type : 'UI.DataField', Value : createdBy,  Label : '{i18n>createdBy}' } ,          
             { $Type : 'UI.DataField', Value : createdAt,  Label : '{i18n>createdOn}' },
-                   
+                             
             
         ]}
     }    
@@ -146,7 +155,8 @@ UI :
             {
                 $Type : 'UI.DataField',
                 Value : statusCode.descr,
-                Label  : '{i18n>status}',  
+                Label  : '{i18n>status}', 
+                Criticality : participantStatusCriticality, 
                 ![@UI.Importance] : #High,
             },
             {               
@@ -164,8 +174,16 @@ UI :
             
         },
         HeaderFacets: [
+            { $Type : 'UI.ReferenceFacet', Target : '@UI.DataPoint#ParticipantStatus'},   
             { $Type : 'UI.ReferenceFacet', Target : '@UI.FieldGroup#Created'}     
         ],
+        DataPoint #ParticipantStatus :{ 
+
+                Title : '{i18n>status}',    
+                Value : statusCode.descr,
+                Criticality : participantStatusCriticality  ,
+                ![@UI.Emphasized],
+        },
 
         Facets             : [
         {
@@ -180,7 +198,7 @@ UI :
         
         {
             $Type  : 'UI.CollectionFacet',
-            Label  : '{i18n>administativeData}',
+             Label  : '{i18n>administativeData}',
             ID     : 'AdministrativeData',
             Facets : [
             { 

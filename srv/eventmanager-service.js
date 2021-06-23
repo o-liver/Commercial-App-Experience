@@ -16,7 +16,61 @@ module.exports = cds.service.impl(srv => {
         }
     })
 
-     
+    srv.after("READ", "Events", (each, req) => {
+
+        const eventStatusCode = each.statusCode ? each.statusCode.code : each.statusCode_code;
+        if(eventStatusCode !== 'undefined' || eventStatusCode !== null || eventStatusCode !== '')
+        {
+            switch(eventStatusCode)
+            {
+                case 0 :
+                    each.eventStatusCriticality = 2;  // Not Released events are yellow
+                    break;
+                case 1:
+                    each.eventStatusCriticality = 3;  // Published events are Green 
+                    break;
+                case 2:
+                    each.eventStatusCriticality = 2;  // Booked events are yellow
+                    break;
+                case 3:
+                    each.eventStatusCriticality = 3;  // Completed events are Green 
+                    break;
+                case 4:
+                    each.eventStatusCriticality = 1;
+                    break;
+                case 5:
+                    each.eventStatusCriticality = 1;
+                    break;
+                default:
+                    each.eventStatusCriticality = 0;
+            }
+        }
+
+    })
+
+    srv.after("READ", "Participants", (each, req) => {
+
+        const participantsStatusCode = each.statusCode ? each.statusCode.code : each.statusCode_code;
+        if(participantsStatusCode)
+        {
+            switch(participantsStatusCode)
+            {
+                
+                case 1:
+                    each.participantStatusCriticality = 2;  // InProcess participants are yellow 
+                    break;
+                case 2:
+                    each.participantStatusCriticality = 3;  // Confirmed participants are green
+                    break;
+                case 3:
+                    each.participantStatusCriticality = 1;  // Cancelled participants are red 
+                    break;                
+                default:
+                    each.eventStatusCriticality = 0;
+            }
+        }
+
+    })
 
         function validateEmail(email) {
         var regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
