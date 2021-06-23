@@ -483,19 +483,30 @@ module.exports = cds.service.impl(srv => {
                     // confirm participation if not already confirmed
                     if(participantData[0].statusCode_code !== 2){
                         if (events[0].availableFreeSlots !== 0){
-                            const availableFreeSlots = events[0].availableFreeSlots - 1;
+                            if(events[0].statusCode_code === 1){
+                                const availableFreeSlots = events[0].availableFreeSlots - 1;
 
-                            // update the available slots and status of event ( if the available slots is zero then set the event status to blocked)
-                            const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({ availableFreeSlots: availableFreeSlots , 
-                                                                    statusCode_code: (availableFreeSlots === 0 ? 2 : events[0].statusCode_code)})
-                                                                .where({ ID: eventID });
+                                // update the available slots and status of event ( if the available slots is zero then set the event status to blocked)
+                                const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({ availableFreeSlots: availableFreeSlots , 
+                                                                        statusCode_code: (availableFreeSlots === 0 ? 2 : events[0].statusCode_code)})
+                                                                    .where({ ID: eventID });
 
-                            //update cancellation status of participant 
-                            participantsRes = await 
-                            UPDATE("sap.cae.eventmanagement.Participants").set({statusCode_code : 2 }).where({ ID: id });
+                                //update cancellation status of participant 
+                                participantsRes = await 
+                                UPDATE("sap.cae.eventmanagement.Participants").set({statusCode_code : 2 }).where({ ID: id });
 
-                            participantData = await SELECT.from("sap.cae.eventmanagement.Participants").where({ ID: id });
-                                    
+                                participantData = await SELECT.from("sap.cae.eventmanagement.Participants").where({ ID: id });
+                            }else if(events[0].statusCode_code === 0){
+                                req.error("Cannot execute the action 'Confirm Participation' , Event is not Published (please publish the event and try again)");                                
+                            }else if(events[0].statusCode_code === 2){
+                                req.error("Cannot execute the action 'Confirm Participation' , Event is fully Booked (no available free slots, try after increasing the maximum slots)");                               
+                            } else if(events[0].statusCode_code === 3){
+                                req.error("Cannot execute the action 'Confirm Participation' , Event is Completed");                               
+                            } else if(events[0].statusCode_code === 4){
+                                req.error("Cannot execute the action 'Confirm Participation' , Event is Blocked (try after publishing the event)");                               
+                            } else if(events[0].statusCode_code === 5){
+                                req.error("Cannot execute the action 'Confirm Participation' , Event is Cancelled (try after publishing the event)");                               
+                            }      
                         }else{
                             req.error("Cannot execute the action 'Confirm Participation' , Event is fully booked (no available free slots, try after increasing the maximum slots)");                         
                         }
