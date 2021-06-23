@@ -19,7 +19,9 @@ annotate EventManager.Events with @(
             {         
                 Value : statusCode.code,
                 @UI.Hidden : true
-            }
+            },
+            { $Type : 'UI.DataField', Label  : '{i18n>participationFee}',     Value : participantsFeeAmount    },
+            { $Type : 'UI.DataField', Label  : '{i18n>currency}',             Value : currency.symbol          },
         ],
         Identification : [ 
             { $Type : 'UI.DataFieldForAction', Label  : '{i18n>publish}',     Action : 'EventManager.publish'  },
@@ -96,7 +98,11 @@ annotate EventManager.Events with @(
             { $Type : 'UI.DataField', Value : date, Label : '{i18n>eventDate}' },
             { $Type : 'UI.DataField', Value : maxParticipantsNumber, Label : '{i18n>maximumAllowedParticipants}' },
             { $Type : 'UI.DataField', Value : availableFreeSlots, Label : '{i18n>availableFreeSlots}' },    
-            { $Type : 'UI.DataField', Value : participantsFeeAmount, Label : '{i18n>participationFee}' }      
+            { $Type : 'UI.DataField', Value : participantsFeeAmount, Label : '{i18n>participationFee}' },
+            //{ $Type : 'UI.DataField', Value : currency.code, Label : '{i18n>currency}' },
+            //{ $Type : 'UI.DataField', Value : currency.descr, Label : '{i18n>currency}' },
+            // { $Type : 'UI.DataField', Value : currency.name, Label : '{i18n>currency}' },
+             { $Type : 'UI.DataField', Value : currency.symbol, Label : '{i18n>currency}' }       
             
             
             

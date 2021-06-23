@@ -11,7 +11,7 @@ entity Events : managed, cuid {
     maxParticipantsNumber   : Integer                    @title : 'Maximum Number of Participants';
     availableFreeSlots      : Integer                    @title : 'Available Free Slots';
     participantsFeeAmount   : Decimal(6,2)               @title : 'Paricipation Fee';
-    currency                : Currency;
+    currency                : Association to one sap.common.Currencies;
     statusCode              : Association to one EventStatusCode @title : 'Event Status';
     participants            : Composition of many Participants on participants.parent = $self;
     //confirmedParticipants   : Association to many Participants on confirmedParticipants.parent = $self and confirmedParticipants.statusCode
