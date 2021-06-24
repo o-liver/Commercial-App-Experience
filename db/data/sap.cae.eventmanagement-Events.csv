@@ -1,7 +1,7 @@
-ID;identifier;date;maxParticipantsNumber;availableFreeSlots;participantsFeeAmount;currency_code;statusCode_code;createdBy
-79ceab87-300d-4b66-8cc3-f82c679b77ab;1;2020-03-01;4;2;100.00;EUR;0;anonymous
-79ceab87-300d-4b66-8cc3-f82c679b77ac;2;2021-03-01;4;1;10.00;EUR;0;anonymous
-79ceab87-300d-4b66-8cc3-f82c679b77ad;3;2021-07-01;20;17;100;USD;0;harry
-79ceab87-300d-4b66-8cc3-f82c679b77ae;4;2021-08-02;20;20;100;USD;0;harry
-79ceab87-300d-4b66-8cc3-f82c679b77af;5;2021-09-03;20;20;100;GBP;0;harry
-79ceab87-300d-4b66-8cc3-f82c679b77a1;6;2021-10-04;20;20;100;EUR;0;draco
+ID;identifier;date;maxParticipantsNumber;availableFreeSlots;participantsFeeAmount;currency_code;statusCode_code;createdBy;title;description
+79ceab87-300d-4b66-8cc3-f82c679b77ab;1;2020-03-01;4;2;100.00;EUR;0;anonymous;SME Summit 2020;SME Innovation Summit in Palma;
+79ceab87-300d-4b66-8cc3-f82c679b77ac;2;2021-03-01;4;1;10.00;EUR;0;anonymous;SAP Teched 2021;SAP TechEd in Bangalore;
+79ceab87-300d-4b66-8cc3-f82c679b77ad;3;2021-07-01;20;17;100;USD;0;harry;Care of Magical Creatures;On how to care for magical beasts. Classes were held outside the castle.;
+79ceab87-300d-4b66-8cc3-f82c679b77ae;4;2021-08-02;20;20;100;USD;0;harry;Divination;The art of predicting the future.;
+79ceab87-300d-4b66-8cc3-f82c679b77af;5;2021-09-03;20;20;100;GBP;0;harry;Potions;The art of creating mixtures with magical effects.;
+79ceab87-300d-4b66-8cc3-f82c679b77a1;6;2021-10-04;20;20;100;EUR;0;draco;DADA;Defense Against the Dark Arts.;
