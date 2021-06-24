@@ -47,6 +47,8 @@ type EventStatus : Integer enum{
   // NotReleased and Cancelled events can be deleted  ( Published , Booked , Completed , Blocked events cannot be deleted)
 }
 
+annotate Events with @fiori.draft.enabled;
+
 annotate Events with {
     ID                      @Core.Computed;
     identifier              @mandatory;
@@ -55,6 +57,7 @@ annotate Events with {
     date                    @mandatory;
     maxParticipantsNumber   @mandatory;        
 }
+
 
 annotate Participants with {
     ID              @Core.Computed;
