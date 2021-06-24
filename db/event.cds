@@ -63,7 +63,7 @@ entity EventStatusCode : sap.common.CodeList {
     key code : Integer @(title : '{i18n>EventStatusCode}') default 0
 }
 
-annotate Events with @fiori.draft.enabled{
+annotate Events with {
     ID                      @Core.Computed;
     identifier              @mandatory;
     title                   @mandatory;
