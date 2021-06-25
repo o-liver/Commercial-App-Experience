@@ -9,7 +9,8 @@ service EventManager @(path:'eventmanager', impl : './eventmanager-service.js', 
   } 
     group by ID  // to make sure to pi
     actions{
-        action cancel() returns Events;
+        @Common.SideEffect:statusCode.desc  
+        action cancel() returns Events ;//@Common.SideEffect statusCode.descr;
         action complete() returns Events;
         action block() returns Events;
         action publish() returns Events;

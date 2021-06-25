@@ -77,7 +77,7 @@ annotate EventManager.Events with @(
             ID     : 'Participants',
             Facets : [
             { 
-                $Type : 'UI.ReferenceFacet', Target : 'participants@UI.LineItem', ID : 'Participants'
+                $Type : 'UI.ReferenceFacet', Target : 'participants.@UI.LineItem', ID : 'Participants'
             }],
         },
         {
@@ -93,6 +93,7 @@ annotate EventManager.Events with @(
         FieldGroup #Values : {
             Data : [           
             { $Type : 'UI.DataField', Value : identifier,  Label : '{i18n>eventID}' },
+            { $Type : 'UI.DataField', Value : statusCode.code,  Label : 'status code' },
             { $Type : 'UI.DataField', Value : title,  Label : '{i18n>title}' },
             { $Type : 'UI.DataField', Value : description, Label : '{i18n>description}' },
             { $Type : 'UI.DataField', Value : date, Label : '{i18n>eventDate}' },
