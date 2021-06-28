@@ -4,7 +4,7 @@ using EventManager as service from 'cae-poc../../../home/user/projects/Commercia
 annotate EventManager.Events with @(
     UI : 
     {        
-        SelectionFields : [ identifier, date,availableFreeSlots,statusCode_code  ],
+        SelectionFields : [ identifier, date,maxParticipantsNumber,availableFreeSlots,statusCode_code,participantsFeeAmount, currency_code ],
         LineItem        : [ 
             { $Type : 'UI.DataFieldForAction', Label  : '{i18n>publish}',     Action : 'EventManager.publish'  },
             { $Type : 'UI.DataFieldForAction', Label  : '{i18n>block}',       Action : 'EventManager.block'    },
@@ -77,7 +77,7 @@ annotate EventManager.Events with @(
             ID     : 'Participants',
             Facets : [
             { 
-                $Type : 'UI.ReferenceFacet', Target : 'participants.@UI.LineItem', ID : 'Participants'
+                $Type : 'UI.ReferenceFacet', Target : 'participants@UI.LineItem', ID : 'Participants'
             }],
         },
         {
