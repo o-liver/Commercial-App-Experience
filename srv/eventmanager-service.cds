@@ -9,11 +9,19 @@ service EventManager @(path:'eventmanager', impl : './eventmanager-service.js', 
   } 
     group by ID  // to make sure to pi
     actions{
-        @Common.SideEffect:statusCode.desc  
-        action cancel() returns Events ;//@Common.SideEffect statusCode.descr;
+        @Common.SideEffects: { TargetProperties: [ statusCode.desc ] } 
+        action cancel() returns Events ;
+        
+        @Common.SideEffects: { TargetProperties: [ statusCode.desc ] } 
         action complete() returns Events;
+
+        @Common.SideEffects: { TargetProperties: [ statusCode.desc ] } 
         action block() returns Events;
+
+        @Common.SideEffects: { TargetProperties: [ statusCode.desc ] } 
         action publish() returns Events;
+        
+        //@Common.SideEffect:statusCode.desc 
     };
  
   entity Participants as projection on eventmanagement.Participants {
