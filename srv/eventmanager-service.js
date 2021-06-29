@@ -192,21 +192,63 @@ module.exports = cds.service.impl(srv => {
                       
             const id = req.ID;
            
-            const events = await SELECT.from("sap.cae.eventmanagement.Events").columns("availableFreeSlots").where({ ID: id });
+            const events = await SELECT.from("sap.cae.eventmanagement.Events").where({ ID: id });
             
+            // get the confirmed count of participants    
+            let confirmedParticipantsCount = 0;   
+                    let participantIDs = [];
+                    req.participants.forEach(participant => { 
+                      participantIDs.push(participant.ID);
+                     
+                    });
+                    const participants = await SELECT.from("sap.cae.eventmanagement.Participants").where("ID in", participantIDs);
+                        
+                    participants.forEach(participant => {
+                       if(participant.statusCode_code === 2){
+                         confirmedParticipantsCount = confirmedParticipantsCount + 1;   
+                        }
+                    });
+
+            // set the status of event to booked , if the available slots is zero
                 if ( events[0].availableFreeSlots != undefined){
                         if ( events[0].availableFreeSlots <= 0)
                         {
+                           if(confirmedParticipantsCount === events[0].maxParticipantsNumber){
+                             //update cancellation status of event 
+                             const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({statusCode_code: 2}).where({ ID: id });
+                            
+                           }
                            
-                            //update cancellation status of event 
-                           const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({statusCode_code: 2}).where({ ID: id });
-
                         }
-                }    
+                        // check if the availabe slots is less than maximum and status was booked , then change the status to published ( available slots increased recently)
+                           if(confirmedParticipantsCount < events[0].maxParticipantsNumber && events[0].statusCode_code === 2){
+                             //update cancellation status of event 
+                             const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({statusCode_code: 1}).where({ ID: id });
+                            
+                           }
+                } 
+              
+                
+                    
+                // incase if max number of participants being updated is more than confirmed participants , then allow update of available slots
+                if ( events[0].maxParticipantsNumber >= confirmedParticipantsCount){
+                           let availableFreeSlots = events[0].maxParticipantsNumber - confirmedParticipantsCount;
+                            //update available slots of event 
+                           const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({availableFreeSlots: availableFreeSlots }).where({ ID: id });
+
+                       
+                }if ( events[0].maxParticipantsNumber > confirmedParticipantsCount && events[0].statusCode_code === 2){
+                           let availableFreeSlots = events[0].maxParticipantsNumber - confirmedParticipantsCount;
+                            //update available slots of event 
+                           const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({availableFreeSlots: availableFreeSlots, statusCode_code: 1 }).where({ ID: id });
+
+                       
+                } 
            
              
         } catch (error) {
-            req.error(error);
+            let a = 1;
+            //req.error(error);
         }
     })
 

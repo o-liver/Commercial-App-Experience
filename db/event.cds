@@ -9,10 +9,10 @@ entity Events : managed, cuid {
     description             : localized String(500)      @title : 'Description';
     date                    : DateTime                   @title : 'Event Date';
     maxParticipantsNumber   : Integer                    @title : 'Maximum Number of Participants';
-    availableFreeSlots      : Integer                    @title : 'Available Free Slots';
+    availableFreeSlots      : Integer                    @title : 'Available Free Slots' @readonly;
     participantsFeeAmount   : Decimal(6,2)               @title : 'Paricipation Fee';
     currency                : Association to one sap.common.Currencies;
-    statusCode              : Association to one EventStatusCode @title : 'Event Status';
+    statusCode              : Association to one EventStatusCode @title : 'Event Status' @readonly;
     participants            : Composition of many Participants on participants.parent = $self;
     //confirmedParticipants   : Association to many Participants on confirmedParticipants.parent = $self and confirmedParticipants.statusCode
 
@@ -25,7 +25,7 @@ entity Participants : managed, cuid {
     name            : String ;
     email           : String;
     mobileNumber    : String;
-    statusCode      : Association to one ParticipantStatusCode;
+    statusCode      : Association to one ParticipantStatusCode @readonly;
 }
 
 /* Code List Data Type with Fixed values */
