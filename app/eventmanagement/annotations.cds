@@ -1,5 +1,5 @@
-using EventManager as service from 'cae-poc../../../home/user/projects/Commercial-App-Experience/srv/eventmanager-service';
-
+//using EventManager as service from 'cae-poc../../../home/user/projects/Commercial-App-Experience/srv/eventmanager-service';
+using EventManager as service from '../../srv/eventmanager-service';
 
 annotate EventManager.Events with @(
     UI : 
