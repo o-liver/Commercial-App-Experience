@@ -67,4 +67,3 @@ resources:
      config:
        xsappname: cae-poc-${space}    #  name + space dependency
        tenant-mode: dedicated
-
