@@ -1,6 +1,6 @@
 const cds = require('@sap/cds')
-
-
+  
+   
 /** Service implementation for Event Management service */
 
 module.exports = cds.service.impl(srv => {
