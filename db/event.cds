@@ -1,6 +1,6 @@
 using { managed, cuid ,Currency } from '@sap/cds/common';
 using sap from '@sap/cds/common';
-namespace sap.cae.eventmanagement;
+namespace sap.cae.eventmanagement;  
 
 /* Event header Entity */
 entity Events : managed, cuid {   
