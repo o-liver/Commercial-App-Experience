@@ -1,6 +1,11 @@
 //using EventManager as service from 'cae-poc../../../home/user/projects/Commercial-App-Experience/srv/eventmanager-service';
 using EventManager as service from '../../srv/eventmanager-service';
 
+annotate EventManager.Events with {
+    participantsFeeAmount @Measures.ISOCurrency: currency_code;
+    //participantsFeeAmount @Measures.Unit: currency_code; 
+};
+
 annotate EventManager.Events with @(
     UI : 
     {        
@@ -21,7 +26,8 @@ annotate EventManager.Events with @(
                 @UI.Hidden : true
             },
             { $Type : 'UI.DataField', Label  : '{i18n>participationFee}',     Value : participantsFeeAmount    },
-            { $Type : 'UI.DataField', Label  : '{i18n>currency}',             Value : currency.symbol          },
+            //{ $Type : 'UI.DataField', Label  : '{i18n>currency}',             Value : currency.code            },
+            //{ $Type : 'UI.DataField', Label  : '{i18n>currency}',             Value : currency.symbol        },
         ],
         Identification : [ 
             { $Type : 'UI.DataFieldForAction', Label  : '{i18n>publish}',     Action : 'EventManager.publish'  },
@@ -103,7 +109,7 @@ annotate EventManager.Events with @(
             //{ $Type : 'UI.DataField', Value : currency.code, Label : '{i18n>currency}' },
             //{ $Type : 'UI.DataField', Value : currency.descr, Label : '{i18n>currency}' },
             // { $Type : 'UI.DataField', Value : currency.name, Label : '{i18n>currency}' },
-             { $Type : 'UI.DataField', Value : currency.symbol, Label : '{i18n>currency}' }       
+            // { $Type : 'UI.DataField', Value : currency.symbol, Label : '{i18n>currency}' }       
             
             
             
@@ -244,3 +250,64 @@ UI :
     }
     
 );
+
+////////////////////////////////////////////////////////////////////////////
+//
+//	Currencies List
+//
+annotate common.Currencies with @(
+	Common.SemanticKey: [code],
+	Identification: [{Value:code}],
+	UI: {
+		SelectionFields: [ name, descr ],
+		LineItem:[
+			{Value: descr},
+			{Value: symbol},
+			{Value: code},
+		],
+	}
+);
+
+////////////////////////////////////////////////////////////////////////////
+//
+//	Currency Details
+//
+annotate common.Currencies with @(
+	UI: {
+		HeaderInfo: {
+			TypeName: '{i18n>Currency}',
+			TypeNamePlural: '{i18n>Currencies}',
+			Title: {Value: descr},
+			Description: {Value: code}
+		},
+		Facets: [
+			{$Type: 'UI.ReferenceFacet', Label: '{i18n>Details}', Target: '@UI.FieldGroup#Details'},
+			{$Type: 'UI.ReferenceFacet', Label: '{i18n>Extended}', Target: '@UI.FieldGroup#Extended'},
+		],
+		FieldGroup#Details: {
+			Data: [
+				{Value: name},
+				{Value: symbol},
+				{Value: code},
+				{Value: descr}
+			]
+		},
+		FieldGroup#Extended: {
+			Data: [
+				{Value: numcode},
+				{Value: minor},
+				{Value: exponent}
+			]
+		},
+	}
+);
+
+////////////////////////////////////////////////////////////////////////////
+//
+//	Currencies Elements
+//
+annotate common.Currencies with {
+	numcode @title:'{i18n>NumCode}';
+	minor @title:'{i18n>MinorUnit}';
+	exponent @title:'{i18n>Exponent}';
+}
