@@ -1,11 +1,6 @@
 //using EventManager as service from 'cae-poc../../../home/user/projects/Commercial-App-Experience/srv/eventmanager-service';
 using EventManager as service from '../../srv/eventmanager-service';
 
-annotate EventManager.Events with {
-    participantsFeeAmount @Measures.ISOCurrency: currency_code;
-    //participantsFeeAmount @Measures.Unit: currency_code; 
-};
-
 annotate EventManager.Events with @(
     UI : 
     {        

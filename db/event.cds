@@ -69,7 +69,9 @@ annotate Events with @fiori.draft.enabled{
     title                   @mandatory;
     description             ;
     date                    @mandatory;
-    maxParticipantsNumber   @mandatory;        
+    maxParticipantsNumber   @mandatory;  
+    participantsFeeAmount   @Measures.ISOCurrency: currency_code;
+    //participantsFeeAmount @Measures.Unit: currency_code;       
 }
 
 annotate Participants with {
