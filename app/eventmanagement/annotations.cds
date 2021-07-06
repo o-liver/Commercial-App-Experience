@@ -87,7 +87,7 @@ annotate EventManager.Events with @(
             ID     : 'Participants',
             Facets : [
             { 
-                $Type : 'UI.ReferenceFacet', Target : 'participants@UI.LineItem', ID : 'Participants'
+                $Type : 'UI.ReferenceFacet', Target : 'participants/@UI.LineItem', ID : 'Participants'
             }],
         },
         {
