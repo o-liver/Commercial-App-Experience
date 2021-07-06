@@ -1,11 +1,16 @@
 //using EventManager as service from 'cae-poc../../../home/user/projects/Commercial-App-Experience/srv/eventmanager-service';
 using EventManager as service from '../../srv/eventmanager-service';
 
+annotate EventManager.Events with {
+    participantsFeeAmount @Measures.ISOCurrency: currency_code;
+    //participantsFeeAmount @Measures.Unit: currency_code; 
+};
+
 annotate EventManager.Events with @(
     UI : 
     {        
         SelectionFields : [ identifier, date,maxParticipantsNumber,availableFreeSlots,statusCode_code,participantsFeeAmount, currency_code ],
-        LineItem        : [ 
+                LineItem        : [ 
             { $Type : 'UI.DataFieldForAction', Label  : '{i18n>publish}',     Action : 'EventManager.publish'  },
             { $Type : 'UI.DataFieldForAction', Label  : '{i18n>block}',       Action : 'EventManager.block'    },
             { $Type : 'UI.DataFieldForAction', Label  : '{i18n>cancel}',      Action : 'EventManager.cancel'   },
@@ -13,15 +18,18 @@ annotate EventManager.Events with @(
             { $Type : 'UI.DataField', Label  : '{i18n>id}',                   Value : identifier               },
             { $Type : 'UI.DataField', Label  : '{i18n>title}',                Value : title                    },
             { $Type : 'UI.DataField', Label  : '{i18n>description}',          Value : description              },
-            { $Type : 'UI.DataField', Label  : '{i18n>date}',                 Value : date                     },
-            { $Type : 'UI.DataField', Label  : '{i18n>availableFreeSlots}',   Value : availableFreeSlots       },
-            { $Type : 'UI.DataField', Label  : '{i18n>status}',               Value : statusCode.descr , Criticality : eventStatusCriticality        },
+            { $Type : 'UI.DataField', Label  : '{i18n>date}',                 Value : date                     },            
             {         
                 Value : statusCode.code,
                 @UI.Hidden : true
-            },
+            },            
             { $Type : 'UI.DataField', Label  : '{i18n>participationFee}',     Value : participantsFeeAmount    },
-            { $Type : 'UI.DataField', Label  : '{i18n>currency}',             Value : currency.symbol          },
+            //{ $Type : 'UI.DataField', Label  : '{i18n>currency}',             Value : currency.code          },
+            //{ $Type : 'UI.DataField', Label  : '{i18n>currency}',             Value : currency.symbol        },
+            
+            { $Type : 'UI.DataField', Label  : '{i18n>availableFreeSlots}',   Value : availableFreeSlots       },
+            { $Type : 'UI.DataField', Label  : '{i18n>createdBy}',            Value : createdBy                },
+            { $Type : 'UI.DataField', Label  : '{i18n>status}',               Value : statusCode.descr , Criticality : eventStatusCriticality        }
         ],
         Identification : [ 
             { $Type : 'UI.DataFieldForAction', Label  : '{i18n>publish}',     Action : 'EventManager.publish'  },
@@ -38,8 +46,9 @@ annotate EventManager.Events with @(
         },
         HeaderFacets: [
             { $Type : 'UI.ReferenceFacet', Target : '@UI.DataPoint#Date' },
-            { $Type : 'UI.ReferenceFacet', Target : '@UI.DataPoint#AvailableFreeSlots'},   
-            { $Type : 'UI.ReferenceFacet', Target : '@UI.DataPoint#EventStatus'},   
+            { $Type : 'UI.ReferenceFacet', Target : '@UI.DataPoint#AvailableFreeSlots'},             
+            { $Type : 'UI.ReferenceFacet', Target : '@UI.DataPoint#ParticipantsFeeAmount'}, 
+            { $Type : 'UI.ReferenceFacet', Target : '@UI.DataPoint#EventStatus'},  
             { $Type : 'UI.ReferenceFacet', Target : '@UI.FieldGroup#Created'}     
         ],
         DataPoint #Date :{ 
@@ -52,6 +61,12 @@ annotate EventManager.Events with @(
 
                 Title : '{i18n>availableFreeSlots}',    
                 Value : availableFreeSlots,
+                ![@UI.Emphasized],
+        },
+         DataPoint #ParticipantsFeeAmount :{ 
+
+                Title : '{i18n>participationFee}',    
+                Value : participantsFeeAmount,
                 ![@UI.Emphasized],
         },
         DataPoint #EventStatus :{ 
@@ -103,7 +118,7 @@ annotate EventManager.Events with @(
             //{ $Type : 'UI.DataField', Value : currency.code, Label : '{i18n>currency}' },
             //{ $Type : 'UI.DataField', Value : currency.descr, Label : '{i18n>currency}' },
             // { $Type : 'UI.DataField', Value : currency.name, Label : '{i18n>currency}' },
-             { $Type : 'UI.DataField', Value : currency.symbol, Label : '{i18n>currency}' }       
+            // { $Type : 'UI.DataField', Value : currency.symbol, Label : '{i18n>currency}' }       
             
             
             
