@@ -33,11 +33,11 @@ service EventManager @(path:'eventmanager', impl : './eventmanager-service.js', 
       *,
       virtual null as participantStatusCriticality: Integer 
   }actions{
-      @(Common.SideEffects: { TargetProperties: [ '_participant.statusCode','_participant.parent.statusCode','_participant.parent.availableFreeSlots','_participant.parent.maxParticipantsNumber' ] },
+      @(Common.SideEffects: { TargetEntities: ['_participant','_participant/parent'] }, //TargetProperties: [ '_participant.statusCode','_participant.parent.statusCode','_participant.parent.availableFreeSlots','_participant.parent.maxParticipantsNumber' ] },
       cds.odata.bindingparameter.name : '_participant' )
       action cancelParticipation() returns Participants;
 
-      @(Common.SideEffects: { TargetProperties: [ '_participant.statusCode','_participant.parent.statusCode','_participant.parent.availableFreeSlots','_participant.parent.maxParticipantsNumber' ] },
+      @(Common.SideEffects: { TargetProperties: [ '_participant/statusCode','_participant/parent/statusCode','_participant/parent/availableFreeSlots','_participant/parent/maxParticipantsNumber' ] },
       cds.odata.bindingparameter.name : '_participant' )
       action confirmParticipation() returns Participants;
   };
