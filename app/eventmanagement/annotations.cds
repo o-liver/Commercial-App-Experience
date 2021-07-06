@@ -18,16 +18,17 @@ annotate EventManager.Events with @(
             { $Type : 'UI.DataField', Label  : '{i18n>id}',                   Value : identifier               },
             { $Type : 'UI.DataField', Label  : '{i18n>title}',                Value : title                    },
             { $Type : 'UI.DataField', Label  : '{i18n>description}',          Value : description              },
-            { $Type : 'UI.DataField', Label  : '{i18n>date}',                 Value : date                     },
-            { $Type : 'UI.DataField', Label  : '{i18n>availableFreeSlots}',   Value : availableFreeSlots       },
-            { $Type : 'UI.DataField', Label  : '{i18n>status}',               Value : statusCode.descr , Criticality : eventStatusCriticality        },
+            { $Type : 'UI.DataField', Label  : '{i18n>date}',                 Value : date                     },            
             {         
                 Value : statusCode.code,
                 @UI.Hidden : true
-            },
+            },            
             { $Type : 'UI.DataField', Label  : '{i18n>participationFee}',     Value : participantsFeeAmount    },
-            //{ $Type : 'UI.DataField', Label  : '{i18n>currency}',             Value : currency.code            },
+            //{ $Type : 'UI.DataField', Label  : '{i18n>currency}',             Value : currency.code          },
             //{ $Type : 'UI.DataField', Label  : '{i18n>currency}',             Value : currency.symbol        },
+            { $Type : 'UI.DataField', Label  : '{i18n>createdBy}',            Value : createdBy                         },
+            { $Type : 'UI.DataField', Label  : '{i18n>availableFreeSlots}',   Value : availableFreeSlots       },
+            { $Type : 'UI.DataField', Label  : '{i18n>status}',               Value : statusCode.descr , Criticality : eventStatusCriticality        }
         ],
         Identification : [ 
             { $Type : 'UI.DataFieldForAction', Label  : '{i18n>publish}',     Action : 'EventManager.publish'  },
@@ -250,7 +251,7 @@ UI :
     }
     
 );
-
+/*
 ////////////////////////////////////////////////////////////////////////////
 //
 //	Currencies List
@@ -311,3 +312,4 @@ annotate common.Currencies with {
 	minor @title:'{i18n>MinorUnit}';
 	exponent @title:'{i18n>Exponent}';
 }
+*/
