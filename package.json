@@ -8,6 +8,9 @@
   "dependencies": {
     "@sap/cds": "^5",
     "@sap/hana-client": "^2.6.61",
+    "@sap/node-jwt": "^1.6.15",
+    "@sap/xsenv": "^3.1.0",
+    "@sap/xssec": "^2.2.5",
     "express": "^4",
     "passport": "^0.4.1",
     "supertest": "^6.1.3"
