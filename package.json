@@ -5,6 +5,10 @@
   "repository": "<Add your repository here>",
   "license": "UNLICENSED",
   "private": true,
+  "engines": {
+    "node": "^12.0.0",
+    "npm": "^6.0.0"
+  },
   "dependencies": {
     "@sap/cds": "^5",
     "@sap/hana-client": "^2.6.61",
