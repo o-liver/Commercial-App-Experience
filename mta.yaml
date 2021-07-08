@@ -36,8 +36,6 @@ modules:
  # ------------------------------------------------------------
    type: hdb
    path: gen/db  
-   parameters:
-     buildpack: nodejs_buildpack
    requires:
     # 'hana' and 'xsuaa' resources extracted from CAP configuration
     - name: cae-poc-db
