@@ -10,8 +10,8 @@ applications:
 - name: cae-poc-srv
   random-route: true  # for development only
   path: gen/srv
-  memory: 256M
-  buildpack: nodejs_buildpack
+  memory: 512M
+  buildpack: https://github.com/cloudfoundry/nodejs-buildpack/releases/download/v1.7.25/nodejs-buildpack-cflinuxfs3-v1.7.25.zip
   services:
   - cae-poc-db
   - cae-poc-uaa
@@ -23,8 +23,8 @@ applications:
   path: gen/db
   no-route: true
   health-check-type: process
-  memory: 256M
+  memory: 512M
   instances: 1
-  buildpack: nodejs_buildpack
+  buildpack: https://github.com/cloudfoundry/nodejs-buildpack/releases/download/v1.7.25/nodejs-buildpack-cflinuxfs3-v1.7.25.zip
   services:
   - cae-poc-db
