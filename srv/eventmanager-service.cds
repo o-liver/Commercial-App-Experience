@@ -10,7 +10,7 @@ service EventManager @(path:'eventmanager', impl : './eventmanager-service.js', 
     *, //count( confirmedParticipants.ID ) as participantsCount : Integer
     virtual null as eventStatusCriticality: Integer 
   } 
-    group by ID  // to make sure to pi
+    //group by ID  // to make sure to pi
      actions{
         @(Common.SideEffects: { TargetProperties: [ '_event.statusCode','_event.availableFreeSlots','_event.maxParticipantsNumber' ] },
         cds.odata.bindingparameter.name : '_event' )
