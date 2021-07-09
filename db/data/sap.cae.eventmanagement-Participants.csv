@@ -1,0 +1,9 @@
+ID;parent_ID;identifier;name;email;mobileNumber;statusCode_code
+79ceab87-300d-4b66-8cc3-182c679b77ab;79ceab87-300d-4b66-8cc3-f82c679b77ab;1;Murthy V;murthy.v@sap.com;+91 9945933229;2
+79ceab87-300d-4b66-8cc3-282c679b77ab;79ceab87-300d-4b66-8cc3-f82c679b77ab;2;Knut Heusermann;knut.heusermann@sap.com;+49 151 57118517;2
+79ceab87-300d-4b66-8cc3-382c679b77ab;79ceab87-300d-4b66-8cc3-f82c679b77ac;1;Quintus Smith;quintus.smith@sap.com;+1 610 3149035;2
+79ceab87-300d-4b66-8cc3-482c679b77ab;79ceab87-300d-4b66-8cc3-f82c679b77ac;2;Johannes Wasserfall;johannes.wasserfall@sap.com;+49 160-3603851;2
+79ceab87-300d-4b66-8cc3-582c679b77ab;79ceab87-300d-4b66-8cc3-f82c679b77ac;3;Teresa Mueller;teresa.mueller@sap.com;+49 151 16810562;2
+79ceab87-300d-4b66-8cc3-682c679b77ab;79ceab87-300d-4b66-8cc3-f82c679b77ad;1;Harry;;;2
+79ceab87-300d-4b66-8cc3-782c679b77ab;79ceab87-300d-4b66-8cc3-f82c679b77ad;2;Ron;;;2
+79ceab87-300d-4b66-8cc3-882c679b77ab;79ceab87-300d-4b66-8cc3-f82c679b77ad;3;Hermine;;;2
