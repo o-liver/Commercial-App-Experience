@@ -41,6 +41,23 @@ modules:
     - name: cae-poc-db
     - name: cae-poc-uaa
 
+ # -------------------- SIDECAR MODULE ------------------------
+ - name: cae-poc-approuter
+ # -------------------- SIDECAR MODULE ------------------------
+   type: approuter.nodejs
+   path: approuter
+   parameters:
+     disk-quota: 256M
+     memory: 256M
+   requires:
+     - name: cae-poc-uaa
+     - name: cae-poc-dest
+       group: destinations
+       properties:
+         forwardAuthToken: true
+         name: cae-poc-dest
+         strictSSL: false
+         url: '~{url}'
 
 resources:
  # services extracted from CAP configuration
