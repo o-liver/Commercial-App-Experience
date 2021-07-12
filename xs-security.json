@@ -65,10 +65,5 @@
             "$XSAPPNAME.AdminRole"
         ]            
       }
-  ],
- "authorities":["$ACCEPT_GRANTED_AUTHORITIES"],
- "oauth2-configuration": {
-                    "token-validity": 900, 
-                    "redirect-uris": ["https://cae-caeruntime-cae-poc-srv.cfapps.eu10.hana.ondemand.com"] 
- }
+  ]
 }
