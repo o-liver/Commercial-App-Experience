@@ -1,0 +1,12 @@
+{
+    "authenticationMethod": "route",
+    "routes": [
+        {
+            "source": "^/eventmanager/(.*)",
+            "target": "/eventmanager/$1",
+            "destination": "srv-cae-api",
+            "authenticationType": "xsuaa",
+            "csrfProtection": false
+        }
+    ]
+}

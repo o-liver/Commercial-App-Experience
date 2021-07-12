@@ -10,7 +10,7 @@
     "npm": "^6.0.0"
   },
   "dependencies": {
-    "@sap/approuter": "^10.4.3",
+    "@sap/approuter": "^10.1.0",
     "@sap/cds": "^5",
     "@sap/hana-client": "^2.6.61",
     "@sap/node-jwt": "^1.6.15",

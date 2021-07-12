@@ -1,0 +1,17 @@
+{
+    "name": "approuter",
+    "description": "Node.js based application router service",
+    "engines": {
+        "node": "^12.0.0"
+    },
+    "scripts": {
+        "start": "node node_modules/@sap/approuter/approuter.js",
+        "start-local": "node node_modules/@sap/html5-repo-mock/index.js",
+        "upgrade-lock": "npx shx rm -rf package-lock.json node_modules && npm i --package-lock=true"
+    },
+    "author": "SAP",
+    "dependencies": {
+        "@sap/approuter": "^10.1.0"
+    },
+    "license": "ISC"
+}

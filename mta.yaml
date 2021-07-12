@@ -8,6 +8,7 @@ version: 1.0.0
 description: "A simple CAP project."
 parameters:
   enable-parallel-deployments: true
+  global-rolecollection-appendix: ""
    
 build-parameters:
   before-all:
@@ -17,17 +18,37 @@ build-parameters:
       - npx -p @sap/cds-dk cds build --production
 
 modules:
+# --------------------- APP Router MODULE ------------------------
+ - name: cae-poc-approuter
+# ------------------------------------------------------------
+   type: nodejs
+   path: approuter  
+   parameters:
+    disk-quota: 256M
+    memory: 256M
+    requires:
+      - name: cae-poc-uaa
+      - name: cae-poc-destination
+      - name: srv-cae-api
+        group: destinations
+        properties:
+          name: srv-cae-api
+          strictSSL: true
+          url: ~{srv-url}          
+          forwardAuthToken: true
+
  # --------------------- SERVER MODULE ------------------------
  - name: cae-poc-srv
  # ------------------------------------------------------------
    type: nodejs
-   path: gen/srv
+   path: gen/srv   
    requires:
     # Resources extracted from CAP configuration
     - name: cae-poc-db
     - name: cae-poc-uaa
+    - name: cae-poc-destination
    provides:
-    - name: srv-api      # required by consumers of CAP services (e.g. approuter)
+    - name: srv-cae-api      
       properties:
         srv-url: ${default-url}
 
@@ -40,7 +61,6 @@ modules:
     # 'hana' and 'xsuaa' resources extracted from CAP configuration
     - name: cae-poc-db
     - name: cae-poc-uaa
-
 
 resources:
  # services extracted from CAP configuration
@@ -65,3 +85,10 @@ resources:
      config:
        xsappname: cae-poc-${space}    #  name + space dependency
        tenant-mode: dedicated
+# ------------------------------------------------------------
+ - name: cae-poc-destination
+# ------------------------------------------------------------
+   type: org.cloudfoundry.managed-service  
+   parameters:
+    service: destination
+    service-plan: lite
