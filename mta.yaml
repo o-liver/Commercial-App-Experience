@@ -57,7 +57,7 @@ modules:
          forwardAuthToken: true
          name: cae-poc-dest
          strictSSL: false
-         url: '~{url}'
+         url: '~${default-url}'
 
 resources:
  # services extracted from CAP configuration
