@@ -5,6 +5,19 @@ const cds = require('@sap/cds')
 
 module.exports = cds.service.impl(srv => {
 
+    //Function for authenticated user
+    srv.on("userInfo", async req => {
+        let results = {};
+        results.user = req.user.id;
+        if(req.user.hasOwnProperty('locale')){
+            results.locale = req.user.locale;
+        }
+        results.roles = {};
+        results.roles.identified = req.user.is('identified-user');
+        results.roles.authenticated = req.user.is('authenticated-user');
+        return results;
+    });
+
    // set the initial value for available slots and status of the event. 
    srv.before("CREATE", "Events", async req => {
         try {

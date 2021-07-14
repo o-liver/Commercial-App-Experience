@@ -1,7 +1,7 @@
 using { sap.cae.eventmanagement as eventmanagement } from '../db/event';
 using sap from '@sap/cds/common';  
 
-service EventManager @(path:'eventmanager', impl : './eventmanager-service.js', requires:['EventManagerRole', 'AdminRole']) {
+service EventManager @(path:'eventmanager', impl: './eventmanager-service.js') @(requires: 'authenticated-user') {
 
   entity Currencies as projection on sap.common.Currencies;
 
@@ -41,6 +41,11 @@ service EventManager @(path:'eventmanager', impl : './eventmanager-service.js', 
       cds.odata.bindingparameter.name : '_participant' )
       action confirmParticipation() returns Participants;
   };
+
+  // Function to return logged in user information
+  type userRoles { identified: Boolean; authenticated: Boolean; };
+  type user { user: String; locale: String; roles: userRoles };
+  function userInfo() returns user;
 
 }
 

@@ -22,6 +22,14 @@
     "attributes": [],
     "role-templates": [
         {
+            "name": "Token_Exchange",
+            "description": "UAA Token Exchange",
+            "scope-references": [
+                "uaa.user"
+            ],
+            "attribute-references": []
+        },
+        {
             "name": "EventManagerRole",
             "description": "generated",
             "scope-references": [

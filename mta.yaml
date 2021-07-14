@@ -17,8 +17,22 @@ build-parameters:
      commands:
       - npm install --production
       - npx -p @sap/cds-dk cds build --production
-
+        
 modules:
+ # --------------------- SERVER MODULE ------------------------
+ - name: cae-poc-srv
+ # ------------------------------------------------------------
+   type: nodejs
+   path: gen/srv   
+   requires:
+    # Resources extracted from CAP configuration
+    - name: cae-poc-db
+    - name: cae-poc-uaa
+   provides:
+    - name: srv-cae-api      
+      properties:
+        srv-url: ${default-url}
+
 # --------------------- APP Router MODULE ------------------------
  - name: cae-poc-approuter
 # ------------------------------------------------------------
@@ -56,21 +70,6 @@ modules:
       name: caepoceventmanagement
       target-path: resources/
 
- # --------------------- SERVER MODULE ------------------------
- - name: cae-poc-srv
- # ------------------------------------------------------------
-   type: nodejs
-   path: gen/srv   
-   requires:
-    # Resources extracted from CAP configuration
-    - name: cae-poc-db
-    - name: cae-poc-uaa
-    - name: cae-poc-destination
-   provides:
-    - name: srv-cae-api      
-      properties:
-        srv-url: ${default-url}
-
  # -------------------- SIDECAR MODULE ------------------------
  - name: cae-poc-db-deployer
  # ------------------------------------------------------------
@@ -95,7 +94,7 @@ modules:
 resources:
  # services extracted from CAP configuration
  # 'service-plan' can be configured via 'cds.requires.<name>.vcap.plan'
-# ------------------------------------------------------------
+# -----------------------HDI Container Service ---------------
  - name: cae-poc-db
 # ------------------------------------------------------------
    type: com.sap.xs.hdi-container
@@ -104,7 +103,8 @@ resources:
      service-plan: hdi-shared
    properties:
      hdi-service-name: ${service-name}
-# ------------------------------------------------------------
+
+# ----------------------UAA Service --------------------------
  - name: cae-poc-uaa
 # ------------------------------------------------------------
    type: org.cloudfoundry.managed-service

@@ -67,6 +67,11 @@
       },
       "uaa": {
         "kind": "xsuaa"
+      },
+      "auth": {
+          "[production]": {
+              "strategy": "JWT"
+          }
       }
     },
     "hana": {
