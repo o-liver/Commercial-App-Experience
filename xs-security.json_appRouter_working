@@ -1,0 +1,81 @@
+{
+  "xsappname": "cae-poc",
+  "tenant-mode": "dedicated",
+  "description": "Security profile of called application",
+  "scopes": [
+    {
+      "name": "uaa.user",
+      "description": "UAA"
+    },
+    {
+            "name": "$XSAPPNAME.EventManagerRole",
+            "description": "EventManagerRole"
+        },
+        {
+            "name": "$XSAPPNAME.AdminRole",
+            "description": "AdminRole"
+        },
+        {
+            "name": "$XSAPPNAME.EventParticipantRole",
+            "description": "EventParticipantRole"
+        }
+  ],
+  "role-templates": [
+    {
+      "name": "Token_Exchange",
+      "description": "UAA",
+      "scope-references": [
+        "uaa.user"
+      ]
+    },
+    
+        {
+            "name": "EventManagerRole",
+            "description": "generated",
+            "scope-references": [
+                "$XSAPPNAME.EventManagerRole", "uaa.user"
+            ],
+            "attribute-references": []
+        },
+        {
+            "name": "AdminRole",
+            "description": "generated",
+            "scope-references": [
+                "$XSAPPNAME.AdminRole", "uaa.user"
+            ],
+            "attribute-references": []
+        },
+        {
+            "name": "EventParticipantRole",
+            "description": "generated",
+            "scope-references": [
+                "$XSAPPNAME.EventParticipantRole", "uaa.user"
+            ],
+            "attribute-references": []
+        }
+  ],
+  "role-collections": [
+        {
+            "name": "EventManagerRoleCollection",
+            "description": "Event Manager",
+            "role-template-references": [
+                "$XSAPPNAME.EventManagerRole",
+                "$XSAPPNAME.EventParticipantRole"
+            ]
+        },
+        {
+            "name": "EventParticipantRoleCollection",
+            "description": "Event Participant",
+            "role-template-references": [
+                "$XSAPPNAME.EventParticipantRole"
+            ]
+        },
+        {
+            "name": "EventAdminRoleCollection",
+            "description": "Event Management Administrator",
+            "role-template-references": [
+                "$XSAPPNAME.AdminRole"
+            ]
+        }
+    ]
+}
