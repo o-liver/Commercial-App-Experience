@@ -9,9 +9,9 @@ module.exports = cds.service.impl(srv => {
     srv.on("userInfo", async req => {
         let results = {};
         results.user = req.user.id;
-        if(req.user.hasOwnProperty('locale')){
-            results.locale = req.user.locale;
-        }
+       // if(req.user.hasOwnProperty('locale')){
+       //     results.locale = req.user.locale;
+       // }
         results.roles = {};
         results.roles.identified = req.user.is('identified-user');
         results.roles.authenticated = req.user.is('authenticated-user');
@@ -30,7 +30,7 @@ module.exports = cds.service.impl(srv => {
     })
 
     srv.after("READ", "Events", (each, req) => {
-
+        if(req);
         const eventStatusCode = each.statusCode ? each.statusCode.code : each.statusCode_code;
         if(eventStatusCode !== 'undefined' || eventStatusCode !== null || eventStatusCode !== '')
         {
@@ -62,7 +62,7 @@ module.exports = cds.service.impl(srv => {
     })
 
     srv.after("READ", "Participants", (each, req) => {
-
+        if(req);
         const participantsStatusCode = each.statusCode ? each.statusCode.code : each.statusCode_code;
         if(participantsStatusCode)
         {
@@ -86,6 +86,7 @@ module.exports = cds.service.impl(srv => {
     })
 
         function validateEmail(email) {
+        // eslint-disable-next-line no-useless-escape
         var regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         if (email.match(regexEmail)) {
             return true; 
@@ -165,6 +166,7 @@ module.exports = cds.service.impl(srv => {
                 }else{
                     //update cancellation status of event 
                     const updateEvent = await UPDATE("sap.cae.eventmanagement.Participants").set({email: req.email}).where({ ID: participantID });
+                    if(updateEvent);
                 }
             }
              if( req.mobileNumber !== 'undefined' && req.mobileNumber ) {
@@ -175,6 +177,7 @@ module.exports = cds.service.impl(srv => {
                 }else{
                     //update phone
                     const updateEvent = await UPDATE("sap.cae.eventmanagement.Participants").set({email: req.phone}).where({ ID: participantID });
+                    if(updateEvent);
                 }
              }
         } catch (error) {
@@ -194,6 +197,8 @@ module.exports = cds.service.impl(srv => {
             const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({ availableFreeSlots: availableFreeSlots , 
                                                            statusCode_code: (availableFreeSlots === 0 ? 2 : events[0].statusCode_code)})
                                                     .where({ ID: eventID });
+            if(updateParticipant);
+            if(updateEvent);
         } catch (error) {
             req.error(error);
         }
@@ -229,6 +234,7 @@ module.exports = cds.service.impl(srv => {
                            if(confirmedParticipantsCount === events[0].maxParticipantsNumber){
                              //update cancellation status of event 
                              const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({statusCode_code: 2}).where({ ID: id });
+                             if(updateEvent);
                             
                            }
                            
@@ -237,6 +243,7 @@ module.exports = cds.service.impl(srv => {
                            if(confirmedParticipantsCount < events[0].maxParticipantsNumber && events[0].statusCode_code === 2){
                              //update cancellation status of event 
                              const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({statusCode_code: 1}).where({ ID: id });
+                             if(updateEvent);
                             
                            }
                 } 
@@ -248,19 +255,19 @@ module.exports = cds.service.impl(srv => {
                            let availableFreeSlots = events[0].maxParticipantsNumber - confirmedParticipantsCount;
                             //update available slots of event 
                            const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({availableFreeSlots: availableFreeSlots }).where({ ID: id });
-
+                            if(updateEvent);
                        
                 }if ( events[0].maxParticipantsNumber > confirmedParticipantsCount && events[0].statusCode_code === 2){
                            let availableFreeSlots = events[0].maxParticipantsNumber - confirmedParticipantsCount;
                             //update available slots of event 
                            const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({availableFreeSlots: availableFreeSlots, statusCode_code: 1 }).where({ ID: id });
-
+                            if(updateEvent);
                        
                 } 
            
              
         } catch (error) {
-            let a = 1;
+            
             //req.error(error);
         }
     })
@@ -477,10 +484,12 @@ module.exports = cds.service.impl(srv => {
                                 // update the available slots of the event  and incase the current status of event is booked , then change it to published
                                 const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({ availableFreeSlots: availableFreeSlots , statusCode_code: 1})
                                                                     .where({ ID: eventID });
+                                                                    if(updateEvent);
                             }else{
                                 // update the available slots of the event 
                                 const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({ availableFreeSlots: availableFreeSlots})
                                                                     .where({ ID: eventID });
+                                                                    if(updateEvent);
                             }
 
                         //update cancellation status of participant 
@@ -545,6 +554,7 @@ module.exports = cds.service.impl(srv => {
                                 const updateEvent = await UPDATE("sap.cae.eventmanagement.Events").set({ availableFreeSlots: availableFreeSlots , 
                                                                         statusCode_code: (availableFreeSlots === 0 ? 2 : events[0].statusCode_code)})
                                                                     .where({ ID: eventID });
+                                                                    if(updateEvent);
 
                                 //update cancellation status of participant 
                                 participantsRes = await 
@@ -606,6 +616,7 @@ module.exports = cds.service.impl(srv => {
                     }else{
                         //update cancellation status of event 
                         const updateEvent = await UPDATE("sap.cae.eventmanagement.Participants").set({email: req.data.email}).where({ ID: participantID });
+                        if(updateEvent);
                     }
                 }
                 if( req.data.mobileNumber !== 'undefined' && req.data.mobileNumber ) {
@@ -616,6 +627,7 @@ module.exports = cds.service.impl(srv => {
                     }else{
                         //update phone
                         const updateEvent = await UPDATE("sap.cae.eventmanagement.Participants").set({email: req.data.mobileNumber}).where({ ID: participantID });
+                        if(updateEvent);
                     }
                 }
             //}else{

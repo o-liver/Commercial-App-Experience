@@ -1,16 +1,16 @@
 ## Application Details
 |               |
 | ------------- |
-|**Generation Date and Time**<br>Wed Jun 09 2021 11:21:11 GMT+0000 (Coordinated Universal Time)|
+|**Generation Date and Time**<br>Thu Jul 15 2021 07:16:05 GMT+0000 (Coordinated Universal Time)|
 |**App Generator**<br>@sap/generator-fiori|
-|**App Generator Version**<br>1.2.0|
+|**App Generator Version**<br>1.2.4|
 |**Generation Platform**<br>SAP Business Application Studio|
 |**Floorplan Used**<br>List Report Object Page V4|
 |**Service Type**<br>Local Cap|
 |**Service URL**<br>/eventmanager/
 |**Module Name**<br>eventmanagement|
 |**Application Title**<br>Event Management|
-|**Namespace**<br>sap.cae.eventmanagement|
+|**Namespace**<br>|
 |**UI5 Theme**<br>sap_fiori_3|
 |**UI5 Version**<br>Latest|
 |**Enable Telemetry**<br>True|
@@ -19,7 +19,7 @@
 
 ## eventmanagement
 
-Event Management Application
+A Event Management application.
 
 ### Starting the generated app
 

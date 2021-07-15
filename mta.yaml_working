@@ -23,14 +23,14 @@ modules:
   type: approuter.nodejs
   path: cae-poc-approuter
   properties:
-    COOKIES: '{ "SameSite":"None" }'
     DEBUG: '*'
     SAP_JWT_TRUST_ACL: |
       [
         {"clientid":"*","identityzone":"*"}
       ]
-    SEND_XFRAMEOPTIONS: false
     TENANT_HOST_PATTERN: ^(.*)-${space}-${app-name}.${domain}
+    COOKIES: '{ "SameSite":"None" }'
+    SEND_XFRAMEOPTIONS: false
   requires:
   - name: cae-poc-uaa
   - name: srv-cae-api
@@ -39,39 +39,9 @@ modules:
       forwardAuthToken: true
       name: srv
       url: ~{srv-url}
-  - name: cae-poc-destination
-    group: destinations
-    properties:
-      forwardAuthToken: false
-      name: ui5
-      url: https://ui5.sap.com
   parameters:
     disk-quota: 256M
     memory: 256M
-- name: cae-poc-app-content
-  type: com.sap.application.content
-  path: .
-  requires:
-  - name: cae-poc_html_repo_host
-    parameters:
-      content-target: true
-  build-parameters:
-    build-result: resources
-    requires:
-    - artifacts:
-      - eventmanagement.zip
-      name: eventmanagement
-      target-path: resources/
-- name: eventmanagement
-  type: html5
-  path: app/eventmanagement
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
 resources:
 - name: cae-poc-db
   type: com.sap.xs.hdi-container
@@ -92,18 +62,6 @@ resources:
 - name: cae-poc-destination
   type: org.cloudfoundry.managed-service
   parameters:
-    config:
-      HTML5Runtime_enabled: true
-      init_data:
-        instance:
-          destinations:
-          - Authentication: NoAuthentication
-            Name: ui5
-            ProxyType: Internet
-            Type: HTTP
-            URL: https://ui5.sap.com
-          existing_destinations_policy: update
-      version: 1.0.0
     service: destination
     service-plan: lite
 - name: cae-poc_html_repo_host
