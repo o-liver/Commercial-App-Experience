@@ -1,7 +1,7 @@
 using { sap.cae.eventmanagement as eventmanagement } from '../db/event';
 using sap from '@sap/cds/common';  
 
-service EventManager @(path:'eventmanager', impl: './eventmanager-service.js') @(requires: 'authenticated-user') {
+service EventManager @(path:'eventmanager', impl: './eventmanager-service.js', requires:['EventManagerRole', 'AdminRole']) {
 
   entity Currencies as projection on sap.common.Currencies;
 
