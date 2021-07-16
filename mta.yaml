@@ -33,6 +33,7 @@ modules:
     TENANT_HOST_PATTERN: ^(.*)-${space}-${app-name}.${domain}
   requires:
   - name: cae-poc-uaa
+  - name: cae-poc-html5-runtime
   - name: srv-cae-api
     group: destinations
     properties:
@@ -106,6 +107,11 @@ resources:
       version: 1.0.0
     service: destination
     service-plan: lite
+- name: cae-poc-html5-runtime
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-runtime
 - name: cae-poc_html_repo_host
   type: org.cloudfoundry.managed-service
   parameters:
