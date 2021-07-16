@@ -7,7 +7,7 @@ modules:
   type: nodejs
   path: gen/srv
   requires:
-  - name: cae-poc-hdi
+  - name: cae-poc-db
   - name: cae-poc-uaa
   provides:
   - name: srv-cae-api
@@ -17,7 +17,7 @@ modules:
   type: hdb
   path: gen/db
   requires:
-  - name: cae-poc-hdi
+  - name: cae-poc-db
   - name: cae-poc-uaa
 - name: cae-poc-approuter
   type: approuter.nodejs
@@ -73,7 +73,7 @@ modules:
     - npm run build:cf
     supported-platforms: []
 resources:
-- name: cae-poc-hdi
+- name: cae-poc-db
   type: com.sap.xs.hdi-container
   parameters:
     service: hana
