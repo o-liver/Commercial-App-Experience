@@ -12,7 +12,7 @@ modules:
   provides:
   - name: srv-cae-api
     properties:
-      srv-url: ${default-url}  
+      srv-url: ${default-url}
 - name: cae-poc-db-deployer
   type: hdb
   path: gen/db
@@ -22,6 +22,15 @@ modules:
 - name: cae-poc-approuter
   type: approuter.nodejs
   path: cae-poc-approuter
+  properties:
+    COOKIES: '{ "SameSite":"None" }'
+    DEBUG: '*'
+    SAP_JWT_TRUST_ACL: |
+      [
+        {"clientid":"*","identityzone":"*"}
+      ]
+    SEND_XFRAMEOPTIONS: false
+    TENANT_HOST_PATTERN: ^(.*)-${space}-${app-name}.${domain}
   requires:
   - name: cae-poc-uaa
   - name: cae-poc-html5-runtime
@@ -34,9 +43,9 @@ modules:
   - name: cae-poc-destination
     group: destinations
     properties:
-      forwardAuthToken: true
+      forwardAuthToken: false
       name: ui5
-      url: https://ui5.sap.com  
+      url: https://ui5.sap.com
   parameters:
     disk-quota: 256M
     memory: 256M
@@ -76,11 +85,11 @@ resources:
   type: org.cloudfoundry.managed-service
   parameters:
     config:
-      tenant-mode: shared
+      tenant-mode: dedicated
       xsappname: cae-poc-${space}
     path: ./xs-security.json
     service: xsuaa
-    service-plan: application 
+    service-plan: application
 - name: cae-poc-destination
   type: org.cloudfoundry.managed-service
   parameters:

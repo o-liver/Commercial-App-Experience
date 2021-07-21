@@ -9,10 +9,14 @@ modules:
   requires:
   - name: cae-poc-hdi
   - name: cae-poc-uaa
+  - name: cae-poc-service-manager
   provides:
   - name: srv-cae-api
     properties:
-      srv-url: ${default-url}  
+      srv-url: ${default-url}
+  - name: srv-multi-tenancy
+    properties:
+      tenant-delimiter: '-'
 - name: cae-poc-db-deployer
   type: hdb
   path: gen/db
@@ -24,6 +28,7 @@ modules:
   path: cae-poc-approuter
   requires:
   - name: cae-poc-uaa
+  - name: cae-poc-saas-registry
   - name: cae-poc-html5-runtime
   - name: srv-cae-api
     group: destinations
@@ -36,7 +41,13 @@ modules:
     properties:
       forwardAuthToken: true
       name: ui5
-      url: https://ui5.sap.com  
+      url: https://ui5.sap.com
+  - name: srv-multi-tenancy
+  provides:
+  - name: app-binding
+    properties:
+      app-fqdn: ${default-host}.${default-domain}
+      app-url: https://~{app-binding/app-fqdn}
   parameters:
     disk-quota: 256M
     memory: 256M
@@ -76,11 +87,35 @@ resources:
   type: org.cloudfoundry.managed-service
   parameters:
     config:
-      tenant-mode: shared
+      tenant-mode: dedicated
       xsappname: cae-poc-${space}
     path: ./xs-security.json
     service: xsuaa
-    service-plan: application 
+    service-plan: application
+    requires:
+    - name: app-binding
+    - name: srv-multi-tenancy
+- name: cae-poc-service-manager
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: service-manager
+    service-plan: container
+- name: cae-poc-saas-registry
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      appName: cae-poc-${space}
+      appUrls:
+        getDependencies: ~{app-binding/app-url}/callback/v1.0/dependencies
+        onSubscription: ~{app-binding/app-url}/callback/v1.0/tenants/{tenantId}
+      category: SME
+      description: SME CAE POC
+      displayName: SME CAE Space-${space}
+      xsappname: cae-poc-${space}
+    service: saas-registry
+    service-plan: application
+  requires:
+  - name: app-binding
 - name: cae-poc-destination
   type: org.cloudfoundry.managed-service
   parameters:
