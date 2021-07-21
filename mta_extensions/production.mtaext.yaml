@@ -1,0 +1,15 @@
+# This is an extension descriptor for enabling multi-tenancy deployment to CF.
+_schema-version: "3.1.0"
+ID: sme.cae.poc.extension
+extends: sme.cae.poc
+parameters:
+    global-rolecollection-appendix: "-prod"
+    global-em-appendix: "-prod"
+    xssecurityjsonpath: "./xs-security-production.json"
+modules:
+    - name: cae-approuter
+      parameters:
+          routes:
+              - route: ${identityzone}-${space}-${app-name}.${domain}
+              - route: caetenant1-${space}-${app-name}.${domain}
+          identityzone: caeprovider

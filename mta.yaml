@@ -1,120 +1,192 @@
 _schema-version: "3.1"
-ID: cae-poc
-description: A simple CAP project.
-version: 1.0.0
+ID: sme.cae.poc
+description: cae Prototype
+version: 1.0.1
 modules:
-- name: cae-poc-srv
-  type: nodejs
-  path: gen/srv
-  requires:
-  - name: cae-poc-hdi
-  - name: cae-poc-uaa
-  provides:
-  - name: srv-cae-api
-    properties:
-      srv-url: ${default-url}  
-- name: cae-poc-db-deployer
-  type: hdb
-  path: gen/db
-  requires:
-  - name: cae-poc-hdi
-  - name: cae-poc-uaa
-- name: cae-poc-approuter
-  type: approuter.nodejs
-  path: cae-poc-approuter
-  requires:
-  - name: cae-poc-uaa
-  - name: cae-poc-html5-runtime
-  - name: srv-cae-api
-    group: destinations
-    properties:
-      forwardAuthToken: true
-      name: srv
-      url: ~{srv-url}
-  - name: cae-poc-destination
-    group: destinations
-    properties:
-      forwardAuthToken: true
-      name: ui5
-      url: https://ui5.sap.com  
-  parameters:
-    disk-quota: 256M
-    memory: 256M
-- name: cae-poc-app-content
-  type: com.sap.application.content
-  path: .
-  requires:
-  - name: cae-poc_html_repo_host
-    parameters:
-      content-target: true
-  build-parameters:
-    build-result: resources
-    requires:
-    - artifacts:
-      - eventmanagement.zip
-      name: eventmanagement
-      target-path: resources/
-- name: eventmanagement
-  type: html5
-  path: app/eventmanagement
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
+    - name: cae-approuter
+      type: nodejs
+      path: cae-approuter
+      properties:
+          DEBUG: "*"
+          SAP_JWT_TRUST_ACL: |
+              [
+                {"clientid":"*","identityzone":"*"}
+              ]
+          TENANT_HOST_PATTERN: ^(.*)-${space}-${app-name}.${domain}
+          COOKIES: '{ "SameSite":"None" }'
+          SEND_XFRAMEOPTIONS: false
+      requires:
+          - name: cae-uaa
+          - name: cae-saas-registry
+          - name: cae-portal
+          - name: cae-theming
+          - name: cae-html5-runtime
+          - name: cae-applog
+          - name: cae-destination
+          - name: cae-flexibility
+          - name: srv-api
+            group: destinations
+            properties:
+                forwardAuthToken: true
+                name: srv-api
+                strictSSL: true
+                url: ~{srv-url}
+          - name: srv-multi-tenancy
+      provides:
+          - name: app-binding
+            properties:
+                app-fqdn: ${default-host}.${default-domain}
+                app-url: https://~{app-binding/app-fqdn}
+      parameters:
+          disk-quota: 256M
+          health-check-timeout: 180
+          memory: 512M
+          routes:
+              - route: ${identityzone}-${space}-${app-name}.${domain}
+              - route: caetenant1-${space}-${app-name}.${domain}
+              - route: caetenant2-${space}-${app-name}.${domain}
+              - route: caetenant3-${space}-${app-name}.${domain}
+              - route: caetenant4-${space}-${app-name}.${domain}
+              - route: caetenant5-${space}-${app-name}.${domain}    
+    - name: cae-uideployer
+      type: com.sap.application.content
+      path: .
+      requires:
+          - name: cae-html5-host
+            parameters:
+                content-target: true
+      build-parameters:
+          build-result: resources
+          requires:
+              - artifacts:
+                    - eventmanagement.zip
+                name: eventmanagement
+                target-path: resources/              
+    - name: cae-srv
+      type: nodejs
+      path: gen/srv
+      properties:
+          CDS_MTX_PROVISIONING_CONTAINER:
+              provisioning_parameters:
+                  database_id: cf9be147-eda6-4f4d-b217-572560e81708
+          DEBUG: true
+          MTX_COLLECT_LOGS: true
+          SAP_JWT_TRUST_ACL: "[\n  {\"clientid\":\"*\",\"identityzone\":\"*\"}\n] \n"
+      requires:
+          - name: cae-uaa
+          - name: cae-service-manager
+          - name: cae-applog
+          - name: cae-destination
+      provides:
+          - name: srv-api
+            properties:
+                srv-url: ${default-url}
+          - name: srv-multi-tenancy
+            properties:
+                tenant-delimiter: "-"
+      parameters:
+          disk-quota: 1GB
+          health-check-timeout: 180
+          memory: 1GB
+    - name: uibuilddependencies
+      type: nodejs
+      path: app
+      build-parameters:
+          builder: custom
+          commands:
+              - npm install
+          supported-platforms: []
+          memory: 1GB
+    - name: eventmanagement
+      type: html5
+      path: app/eventmanagement
+      requires:
+          - name: uibuilddependencies
+      build-parameters:
+          build-result: dist
+          builder: custom
+          commands:
+              - npm run build:cf
+          supported-platforms: []    
 resources:
-- name: cae-poc-hdi
-  type: com.sap.xs.hdi-container
-  parameters:
-    service: hana
-    service-plan: hdi-shared
-  properties:
-    hdi-service-name: ${service-name}
-- name: cae-poc-uaa
-  type: org.cloudfoundry.managed-service
-  parameters:
-    config:
-      tenant-mode: dedicated
-      xsappname: cae-poc-${space}
-    path: ./xs-security.json
-    service: xsuaa
-    service-plan: application 
-- name: cae-poc-destination
-  type: org.cloudfoundry.managed-service
-  parameters:
-    config:
-      HTML5Runtime_enabled: true
-      init_data:
-        instance:
-          destinations:
-          - Authentication: NoAuthentication
-            Name: ui5
-            ProxyType: Internet
-            Type: HTTP
-            URL: https://ui5.sap.com
-          existing_destinations_policy: update
-      version: 1.0.0
-    service: destination
-    service-plan: lite
-- name: cae-poc-html5-runtime
-  type: org.cloudfoundry.managed-service
-  parameters:
-    service: html5-apps-repo
-    service-plan: app-runtime
-- name: cae-poc_html_repo_host
-  type: org.cloudfoundry.managed-service
-  parameters:
-    service: html5-apps-repo
-    service-plan: app-host
+    - name: cae-flexibility
+      parameters:
+          service-plan: keyuser
+          service: ui5-flexibility-keyuser
+      type: org.cloudfoundry.managed-service
+    - name: cae-uaa
+      type: org.cloudfoundry.managed-service
+      parameters:
+          #path: ${xssecurityjsonpath}
+          #config-path: ${xssecurityjsonpath}
+          service: xsuaa
+          service-plan: application
+          requires:
+              - name: app-binding
+              - name: srv-multi-tenancy
+    - name: cae-service-manager
+      type: org.cloudfoundry.managed-service
+      parameters:
+          service: service-manager
+          service-plan: container
+    - name: cae-html5-runtime
+      type: org.cloudfoundry.managed-service
+      parameters:
+          service: html5-apps-repo
+          service-plan: app-runtime
+    - name: cae-html5-host
+      type: org.cloudfoundry.managed-service
+      parameters:
+          service: html5-apps-repo
+          service-plan: app-host
+    - name: cae-saas-registry
+      type: org.cloudfoundry.managed-service
+      parameters:
+          config:
+              appName: cae-${space}
+              appUrls:
+                  getDependencies: ~{app-binding/app-url}/callback/v1.0/dependencies
+                  onSubscription: ~{app-binding/app-url}/callback/v1.0/tenants/{tenantId}
+              category: SME
+              description: SME cae POC
+              displayName: SME cae Space-${space}
+              xsappname: cae-${space}
+          service: saas-registry
+          service-plan: application
+      requires:
+          - name: app-binding
+    - name: cae-destination
+      type: org.cloudfoundry.managed-service
+      parameters:
+          service: destination
+          service-plan: lite
+    - name: cae-portal
+      type: org.cloudfoundry.managed-service
+      parameters:
+          service: portal
+          service-plan: standard
+    - name: cae-applog
+      type: org.cloudfoundry.managed-service
+      parameters:
+          service: cloud-logging
+          service-plan: standard
+    - name: cae-theming
+      type: org.cloudfoundry.managed-service
+      parameters:
+          service: theming
+          service-plan: standard  
 parameters:
-  deploy_mode: html5-repo
-  enable-parallel-deployments: true
-  global-rolecollection-appendix: ""
+    deploy_mode: html5-repo
+    enable-parallel-deployments: true
+    global-rolecollection-appendix: ""
+    xssecurityjsonpath: "./xs-security.json"
 build-parameters:
-  before-all:
-  - builder: custom
-    commands:
-    - npm install --production
-    - npx -p @sap/cds-dk cds build --production
+    before-all:
+        - builder: custom
+          commands:
+              - npm ci --production
+              # - npm install --production
+              - npx -p @sap/cds-dk cds compile srv --to openapi -s all -o srv/openapi
+              - npx -p @sap/cds-dk cds build --production
+              - npx copyfiles ./.npmrc ./gen/srv # Ensure that dependencies will be fetched from nexus also when building cae-srv
+              - npx rimraf ./gen/srv/sdc/db/sqlite

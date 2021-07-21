@@ -1,5 +1,5 @@
 {
-    "welcomeFile": "/index.html",
+    "welcomeFile": "index.html",
     "authenticationMethod": "route",
     "routes": [
         {
@@ -12,7 +12,7 @@
         {
             "source": "^/eventmanagement/(.*)$",
             "target": "/eventmanagement/$1",
-            "destination": "srv",
+            "destination": "srv-api",
             "authenticationType": "xsuaa",
             "csrfProtection": false
         },
