@@ -1,4 +1,4 @@
-//using EventManager as service from 'cae-poc../../../home/user/projects/Commercial-App-Experience/srv/eventmanager-service';
+//using EventManager as service from 'https://cae-caeruntime-cae-poc-approuter.cfapps.eu10.hana.ondemand.com/eventmanagement/eventmanager';
 using EventManager as service from '../../srv/eventmanager-service';
 
 annotate EventManager.Events with @(

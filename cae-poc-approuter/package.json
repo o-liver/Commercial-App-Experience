@@ -1,17 +1,20 @@
 {
-	"name": "approuter",
+    "name": "approuter",
+     "version": "1.0.0",
 	"description": "Node.js based application router service for html5-apps",
 	"engines": {
-		"node": "^10.0.0 || ^12.0.0"
+		"node": "^10.0.0 || ^12.0.0 || ^14.0.0"
 	},
 	"dependencies": {
-		"@sap/approuter": "9.0.1"
+		"@sap/approuter": "^10.1.0",
+        "@sap/xsenv": "^3.1.0"
 	},
 	"devDependencies": {
 		"@sap/html5-repo-mock": "2.0.1"
 	},
 	"scripts": {
 		"start": "node node_modules/@sap/approuter/approuter.js",
-		"start-local": "node node_modules/@sap/html5-repo-mock/index.js"
+        "start-local": "node node_modules/@sap/html5-repo-mock/index.js",
+         "upgrade-lock": "npx shx rm -rf package-lock.json node_modules && npm i --package-lock=true"
 	}
 }

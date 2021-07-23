@@ -27,7 +27,18 @@
   },
   "scripts": {
     "start": "cds run",
-    "test": "jest"
+    "test": "jest",
+    "deploy": "cds deploy --to sqlite:my.db --no-save",
+    "deploy:hana": "npx cross-env NODE_ENV=devhana cds deploy --to hana --auto-undeploy",
+    "start:hana": "npx cross-env NODE_ENV=devhana cds run",
+    "watch": "cds watch",
+    "watch:hana": "npx cross-env NODE_ENV=devhana cds watch",
+    "watch:test": "npm-watch test",
+    "build": "npx cds build",
+    "mta:build": "mbt build -m=verbose -j=8",
+    "mta:deploy": "cf deploy mta_archives/sme.nscm.poc_1.0.0.mtar -f --version-rule ALL -e mtaextension.yaml",
+    "mta:deploy:srv": "npm run mta:deploy -- --all-resources -m cae-poc-srv",
+    "mta:deploy:ui": "npm run mta:deploy -- --all-resources -m cae-poc-app-content"    
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
