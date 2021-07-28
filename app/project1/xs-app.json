@@ -2,6 +2,14 @@
   "welcomeFile": "/index.html",
   "authenticationMethod": "route",
   "routes": [
+
+    {
+      "source": "^/eventmanager/(.*)$",
+      "target": "/eventmanager/$1",
+      "destination": "srv-api",
+      "authenticationType": "xsuaa",
+      "csrfProtection": false
+    },
     {
       "source": "^/resources/(.*)$",
       "target": "/resources/$1",
@@ -13,20 +21,6 @@
       "target": "/test-resources/$1",
       "authenticationType": "none",
       "destination": "ui5"
-    },
-    {
-      "source": "^/eventmanager/(.*)$",
-      "target": "/eventmanager/$1",
-      "destination": "srv-api",
-      "authenticationType": "xsuaa",
-      "csrfProtection": false
-    },
-    {
-      "source": "^/eventmanagement/(.*)$",
-      "target": "/eventmanagement/$1",
-      "destination": "srv-api",
-      "authenticationType": "xsuaa",
-      "csrfProtection": false
     },
     {
       "source": "^(.*)$",

@@ -18,10 +18,11 @@
     "@sap/xssec": "^2.2.5",
     "express": "^4",
     "passport": "^0.4.1",
-    "supertest": "^6.1.3"
+    "supertest": "^6.1.3",
+    "xs": "^0.1.0"
   },
   "devDependencies": {
-    "@sap/ux-specification": "^1.90.4",
+    "@sap/ux-specification": "^1.90.5",
     "jest": "^27.0.1",
     "sqlite3": "^5.0.2"
   },
@@ -38,7 +39,7 @@
     "mta:build": "mbt build -m=verbose -j=8",
     "mta:deploy": "cf deploy mta_archives/sme.nscm.poc_1.0.0.mtar -f --version-rule ALL -e mtaextension.yaml",
     "mta:deploy:srv": "npm run mta:deploy -- --all-resources -m cae-poc-srv",
-    "mta:deploy:ui": "npm run mta:deploy -- --all-resources -m cae-poc-app-content"    
+    "mta:deploy:ui": "npm run mta:deploy -- --all-resources -m cae-poc-app-content"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
@@ -97,6 +98,7 @@
     "app/eventmanagement",
     "app/app",
     "app/eventmanagement",
-    "app/eventmanagement"
+    "app/eventmanagement",
+    "app/project1"
   ]
 }

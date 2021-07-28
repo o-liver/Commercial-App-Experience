@@ -1,7 +1,7 @@
 {
     "_version": "1.32.0",
     "sap.app": {
-        "id": "eventmanagement",
+        "id": "project1",
         "type": "application",
         "i18n": "i18n/i18n.properties",
         "applicationVersion": {
@@ -23,27 +23,6 @@
         "sourceTemplate": {
             "id": "ui5template.fiorielements.v4.lrop",
             "version": "1.0.0"
-        },
-        "crossNavigation": {
-            "inbounds": {
-                "eventmanagement": {
-                    "signature": {
-                        "parameters": {},
-                        "additionalParameters": "allowed"
-                    },
-                    "indicatorDataSource": {
-                        "path": "Events/$count",
-                        "refresh": 60,
-                        "displayNumberUnit": "",
-                        "dataSource": "mainService"
-                    },
-                    "semanticObject": "events",
-                    "action": "display",
-                    "title": "Events",
-                    "subTitle": "",
-                    "icon": "sap-icon://globe"
-                }
-            }
         }
     },
     "sap.ui": {

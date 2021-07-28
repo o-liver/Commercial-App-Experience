@@ -28,3 +28,20 @@ applications:
   buildpack: https://github.com/cloudfoundry/nodejs-buildpack/releases/download/v1.7.25/nodejs-buildpack-cflinuxfs3-v1.7.25.zip
   services:
   - cae-poc-db
+
+
+- name: cae-poc-approuter
+  path: web
+  env:
+    CORS: >
+      [
+        {
+          "allowedOrigin":[
+                            {
+                                "host":"ui5.sap.com",
+                                "protocol":"https"
+                            }
+                          ],
+          "uriPattern":"^/eventmanagement/(.*)$"
+        }
+      ]
