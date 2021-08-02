@@ -15,15 +15,13 @@
         "postinstall": "npx shx rm -rf node_modules && echo 'Perform `npm install` only in folder `app/`'"
     },
     "devDependencies": {
+        "@sap/ui5-builder-webide-extension": "1.0.x",
         "@ui5/cli": "^2.11.1",
         "@ui5/fs": "^2.0.6",
         "@ui5/logger": "^2.0.1",
-        "@sap/ux-ui5-tooling": "1",
+        "mbt": "^1.0.15",
         "rimraf": "3.0.2",
-        "@sap/ux-specification": "latest",
-        "@sap/ui5-builder-webide-extension": "1.0.x",
-        "ui5-task-zipper": "^0.3.1",
-        "mbt": "^1.0.15"
+        "ui5-task-zipper": "^0.3.1"
     },
     "ui5": {
         "dependencies": [
