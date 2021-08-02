@@ -50,6 +50,19 @@ modules:
   parameters:
     disk-quota: 256M
     memory: 256M
+- name: cae-poc-flpdeployer
+  type: com.sap.portal.content
+  path: flp
+  parameters:
+    stack: cflinuxfs3
+    memory: 128M
+    buildpack: "https://github.com/cloudfoundry/nodejs-buildpack.git#v1.7.11"
+  properties:
+      requires:
+          - name: cae-poc_html_repo_host
+          - name: cae-poc-app-content
+          - name: cae-poc-uaa
+          - name: app-binding
 - name: cae-poc-app-content
   type: com.sap.application.content
   path: .

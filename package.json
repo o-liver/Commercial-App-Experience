@@ -39,7 +39,8 @@
     "mta:build": "mbt build -m=verbose -j=8",
     "mta:deploy": "cf deploy mta_archives/sme.nscm.poc_1.0.0.mtar -f --version-rule ALL -e mtaextension.yaml",
     "mta:deploy:srv": "npm run mta:deploy -- --all-resources -m cae-poc-srv",
-    "mta:deploy:ui": "npm run mta:deploy -- --all-resources -m cae-poc-app-content"
+    "mta:deploy:ui": "npm run mta:deploy -- --all-resources -m cae-poc-app-content",
+    "mta:deploy:flp": "npm run mta:deploy -- --all-resources -m cae-poc-flpdeployer"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",

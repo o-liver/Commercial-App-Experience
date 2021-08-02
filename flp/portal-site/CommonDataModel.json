@@ -1,0 +1,113 @@
+{
+    "_version": "3.0.0",
+    "identification": {
+        "id": "be3bcdfa-db38-48d6-afde-ae26a529d8f2",
+        "entityType": "bundle"
+    },
+    "payload": {
+        "catalogs": [
+            {
+                "_version": "3.0.0",
+                "identification": {
+                    "id": "defaultCatalogId",
+                    "title": "{{title}}",
+                    "entityType": "catalog",
+                    "i18n": "i18n/defaultCatalogId.properties"
+                },
+                "payload": {
+                    "viz": []
+                }
+            }
+        ],
+        "groups": [
+            {
+                "_version": "3.0.0",
+                "identification": {
+                    "id": "defaultGroupId",
+                    "title": "{{titlenscm}}",
+                    "entityType": "group",
+                    "i18n": "i18n/defaultGroupId.properties"
+                },
+                "payload": {
+                    "viz": [
+                        {
+                            "id": "sap-cae-eventmanagement-0-1605199458176",
+                            "appId": "sap.cae.eventmanagement",
+                            "vizId": "eventmanagement-display"
+                        }
+                    ]
+                }
+            }
+        ],
+        "sites": [
+            {
+                "_version": "3.0.0",
+                "identification": {
+                    "id": "c34c17f1-2eb7-43df-b1e2-098835b7208d",
+                    "entityType": "site",
+                    "title": "SAP Fiori Launchpad Notification PoC",
+                    "description": "SAP Fiori Launchpad Notification PoC"
+                },
+                "payload": {
+                    "config": {
+                        "ushellConfig": {
+                            "renderers": {
+                                "fiori2": {
+                                    "componentData": {
+                                        "config": {
+                                            "applications": {
+                                                "Shell-home": {}
+                                            },
+                                            "enableSearch": true,
+                                            "enablePersonalization": true,
+                                            "enableNotificationsUI": true,
+                                            "enableSetTheme": true,
+                                            "enableSetLanguage": true,
+                                            "enableWebAssist": true,
+                                            "webAssistantParams": {
+                                                "product": "SAP_S4HANA_ON-PREMISE",
+                                                "version": "2020.latest",
+                                                "dataUrlUACP": "https://help.sap.com/webassistant",
+                                                "resourceUrl": "https://webassistant.enable-now.cloud.sap/web_assistant/framework/"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            
+                            "bootstrapPlugins": {
+                                "KeyUserPlugin": {
+                                    "component": "sap.ushell.plugins.rta",
+                                    "oAuthScopes": [
+                                        "$XSAPPNAME.KEYUSER"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "groupsOrder": [
+                        "defaultGroupId",
+                        "EventManagement"
+                    ],
+                    "sap.cloud.portal": {
+                        "config": {
+                            "theme.id": "sap_fiori_3",
+                            "theme.active": [
+                                "sap_fiori_3",
+                                "sap_fiori_3_dark",
+                                "sap_belize_hcb",
+                                "sap_belize_hcw"
+                            ],
+                            "flexibilityServices": [
+                                {
+                                    "connector": "KeyUserConnector",
+                                    "url": "/keyuser"
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        ]
+    }
+}

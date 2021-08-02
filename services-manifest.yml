@@ -10,3 +10,7 @@ create-services:
   - name:   cae-poc-uaa
     broker: xsuaa
     plan: "broker"
+# ------------------------------------------------------------
+  - name:   cae-poc-portal
+    broker: portal
+    plan: "standard"

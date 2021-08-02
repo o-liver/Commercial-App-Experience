@@ -1,0 +1,16 @@
+{
+    "engines": {
+        "node": "12.x.x"
+    },
+    "name": "app1-d044813-flp",
+    "version": "3.27.0",
+    "description": "portal site content deployer package",
+    "license": "Apache-2.0",
+    "author": "Portal Team",
+    "dependencies": {
+        "@sap/portal-cf-content-deployer": "4.1.0-20200401113308"
+    },
+    "scripts": {
+        "start": "node --harmony node_modules/@sap/portal-cf-content-deployer/src/index.js"
+    }
+}
