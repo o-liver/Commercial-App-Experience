@@ -174,7 +174,7 @@ build-parameters:
   before-all:
   - builder: custom
     commands:
-    - npm ci --production
+    - npm i --production
     - npx -p @sap/cds-dk cds compile srv --to openapi -s all -o srv/openapi
     - npx -p @sap/cds-dk cds build --production
     - npx copyfiles ./.npmrc ./gen/srv
