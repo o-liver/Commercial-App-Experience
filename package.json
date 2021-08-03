@@ -19,7 +19,8 @@
     "express": "^4",
     "passport": "^0.4.1",
     "supertest": "^6.1.3",
-    "xs": "^0.1.0"
+    "xs": "^0.1.0",
+    "@sap/cds-dk": "4.3.3"
   },
   "devDependencies": {
     "@sap/ux-specification": "^1.90.5",

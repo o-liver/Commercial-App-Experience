@@ -30,6 +30,7 @@ modules:
   requires:
   - name: cae-poc-uaa
   - name: cae-poc-html5-runtime
+  - name: cae-poc-portal
   - name: srv-api
     group: destinations
     properties:
@@ -63,10 +64,11 @@ modules:
           - name: cae-poc-app-content
           - name: cae-poc-uaa
           - name: app-binding
+          - name: cae-poc-portal
 - name: cae-poc-app-content
   type: com.sap.application.content
   path: .
-  requires:
+  requires:  
   - name: cae-poc_html_repo_host
     parameters:
       content-target: true
@@ -112,6 +114,11 @@ modules:
     - npm run build:cf
     supported-platforms: []
 resources:
+- name: cae-poc-portal
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: portal
+    service-plan: standard
 - name: cae-poc-hdi
   type: com.sap.xs.hdi-container
   parameters:
@@ -174,7 +181,7 @@ build-parameters:
   before-all:
   - builder: custom
     commands:
-    - npm ci --production
+    - npm i --production
     - npx -p @sap/cds-dk cds compile srv --to openapi -s all -o srv/openapi
     - npx -p @sap/cds-dk cds build --production
     - npx copyfiles ./.npmrc ./gen/srv
