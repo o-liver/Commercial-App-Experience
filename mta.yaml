@@ -154,6 +154,45 @@ resources:
       version: 1.0.0
     service: destination
     service-plan: lite
+- name: cae-poc-destinations
+  type: org.cloudfoundry.managed-service
+  requires:
+    - name: cae-poc-uaa
+      parameters:
+        service-key:
+        name: cae-poc-uaa-key
+    - name: cae-poc_html_repo_host
+      parameters:
+        service-key:
+        name: cae-poc_html_repo_host-key
+    - name: srv-api
+    - name: cae-poc-destination
+      parameters:
+        content-target: true
+  parameters:
+    content:
+      instance:
+        destinations:
+          - Authentication: OAuth2UserTokenExchange
+            Name: cae-poc-srv
+            TokenServiceInstanceName: cae-poc-uaa
+            TokenServiceKeyName: cae-poc-uaa-key
+            URL: '~{srv-api/srv-url}'
+            sap.cloud.service: cae-poc.service
+          - Name: cae-poc_html_repo_host
+            ServiceInstanceName: cae-poc_html_repo_host
+            ServiceKeyName: cae-poc_html_repo_host-key
+            sap.cloud.service: cae-poc.service
+          - Authentication: OAuth2UserTokenExchange
+            Name: cae-poc-uaa
+            ServiceInstanceName: cae-poc-uaa
+            ServiceKeyName: cae-poc-uaa-key
+            sap.cloud.service: cae-poc.service
+        existing_destinations_policy: update
+    build-parameters:
+      no-source: true
+    service: destination
+    service-plan: lite
 - name: cae-poc-html5-runtime
   type: org.cloudfoundry.managed-service
   parameters:
@@ -174,7 +213,7 @@ build-parameters:
   before-all:
   - builder: custom
     commands:
-    - npm ci --production
+    - npm i --production
     - npx -p @sap/cds-dk cds compile srv --to openapi -s all -o srv/openapi
     - npx -p @sap/cds-dk cds build --production
     - npx copyfiles ./.npmrc ./gen/srv
